@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>行程 · 東京 2026</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    .day-theme {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      color: var(--white);
+      background: var(--accent);
+      padding: 0.15rem 0.6rem;
+      border-radius: 1px;
+      align-self: flex-start;
+      margin-top: 0.2rem;
+      text-transform: uppercase;
+    }
+    .day-heading { flex-wrap: wrap; gap: 0.5rem 0.75rem; }
+    .transit-note {
+      font-size: 0.7rem;
+      color: var(--ink-faint);
+      background: var(--paper);
+      border-left: 2px solid var(--accent-light);
+      padding: 0.3rem 0.6rem;
+      margin: 0.1rem 0 0.2rem;
+      letter-spacing: 0.04em;
+    }
+    .event-link {
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-light);
+      display: inline-block;
+      margin-top: 0.2rem;
+    }
+    .event-link:hover { color: var(--ink); }
+    .event-map-link {
+      font-size: 0.63rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--accent-light);
+      display: inline-block;
+      margin-top: 0.25rem;
+      margin-right: 0.5rem;
+      transition: color 0.15s;
+    }
+    .event-map-link:hover { color: var(--ink); border-bottom-color: var(--ink); }
+    .event-price {
+      font-size: 0.7rem;
+      color: var(--green);
+      letter-spacing: 0.05em;
+      margin-top: 0.15rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <span class="nav-logo">東京 · 2026</span>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">首頁</a>
+      <a href="itinerary.html" class="nav-link active">行程</a>
+      <a href="budget.html" class="nav-link">記帳</a>
+      <a href="checklist.html" class="nav-link">清單</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="page-header">
+      <div class="page-en">Itinerary</div>
+      <div class="page-zh">旅行行程 · 2026.08.12 – 08.19</div>
+    </div>
+
+    <!-- ── DAY 1 · 8/12 御徒町 ── -->
+    <div class="day-block">
+      <div class="day-heading">
+        <div class="day-num">01</div>
+        <div class="day-meta">
+          <div class="day-date">8 月 12 日</div>
+          <div class="day-week">週三</div>
+        </div>
+        <div class="day-theme">御徒町</div>
+      </div>
+      <div class="timeline" id="day-1">
+        <div class="event">
+          <div class="event-time">16:50</div>
+          <div class="event-body">
+            <div class="event-title">出發 ✈ TSA 台北松山機場 T1</div>
+            <div class="event-sub">ANA NH854</div>
+          </div>
+          <div class="event-tag event-tag--flight">航班</div>
+        </div>
+        <div class="event">
+          <div class="event-time">20:50</div>
+          <div class="event-body">
+            <div class="event-title">抵達 HND 東京羽田機場</div>
+            <div class="event-sub">入境、領行李、前往飯店</div>
+          </div>
+          <div class="event-tag event-tag--flight">航班</div>
+        </div>
+        <div class="event">
+          <div class="event-time">入住</div>
+          <div class="event-body">
+            <div class="event-title">🛏 上野御徒町東誠可可尼飯店</div>
+            <div class="event-sub">Tosei Hotel Cocone Ueno Okachimachi · Taito City, Tokyo</div>
+            <div class="event-sub">15:00 後入住 ／ 10:00 前退房</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/wqxZPZXEyqPPJadt7" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--hotel">住宿</div>
+        </div>
+      </div>
+      <button class="add-event-btn" onclick="addEvent('day-1')">＋ 新增行程</button>
+    </div>
+
+    <!-- ── DAY 2 · 8/13 表參道 + 下北澤 ── -->
+    <div class="day-block">
+      <div class="day-heading">
+        <div class="day-num">02</div>
+        <div class="day-meta">
+          <div class="day-date">8 月 13 日</div>
+          <div class="day-week">週四</div>
+        </div>
+        <div class="day-theme">表參道 · 下北澤</div>
+      </div>
+      <div class="timeline" id="day-2">
+        <div class="event">
+          <div class="event-time">09:00</div>
+          <div class="event-body">
+            <div class="event-title">明治神宮</div>
+            <div class="event-sub">開放時間 09:00–16:30</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=明治神宮" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">11:00</div>
+          <div class="event-body">
+            <div class="event-title">Kiddy Land 原宿</div>
+            <div class="event-sub">Kiddy Land · Shibuya, Tokyo　11:00–20:00</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=Kiddy+Land+原宿" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">購物</div>
+        </div>
+        <div class="event">
+          <div class="event-time">12:00</div>
+          <div class="event-body">
+            <div class="event-title">Found MUJI 青山</div>
+            <div class="event-sub">Muji · Shibuya, Tokyo　12:00–20:00</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=Found+MUJI+青山" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">購物</div>
+        </div>
+        <div class="event">
+          <div class="event-time">下午</div>
+          <div class="event-body">
+            <div class="event-title">前往下北澤</div>
+            <div class="transit-note">京王井之頭線 ➡ 澀谷車站 ➡ 下北澤站 ➡ 步行 3 分鐘</div>
+          </div>
+          <div class="event-tag event-tag--flight">交通</div>
+        </div>
+        <div class="event">
+          <div class="event-time">12:00</div>
+          <div class="event-body">
+            <div class="event-title">unu glänta shimokitazawa</div>
+            <div class="event-sub">平日 12:00–20:00　節假日 11:00–20:00</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=unu+glanta+shimokitazawa" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">購物</div>
+        </div>
+        <div class="event">
+          <div class="event-time">夜</div>
+          <div class="event-body">
+            <div class="event-title">🛏 返回飯店</div>
+            <div class="event-sub">上野御徒町東誠可可尼飯店</div>
+          </div>
+          <div class="event-tag event-tag--hotel">住宿</div>
+        </div>
+      </div>
+      <button class="add-event-btn" onclick="addEvent('day-2')">＋ 新增行程</button>
+    </div>
+
+    <!-- ── DAY 3 · 8/14 淺草 / 銀座 ── -->
+    <div class="day-block">
+      <div class="day-heading">
+        <div class="day-num">03</div>
+        <div class="day-meta">
+          <div class="day-date">8 月 14 日</div>
+          <div class="day-week">週五</div>
+        </div>
+        <div class="day-theme">淺草 · 銀座</div>
+      </div>
+      <div class="timeline" id="day-3">
+        <div class="event">
+          <div class="event-time">早上</div>
+          <div class="event-body">
+            <div class="event-title">淺草寺 · 雷門</div>
+            <div class="event-sub">JR 淺草站 · 遠眺晴空塔</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/UGsN6FF2wCYmyaD28" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">09:00</div>
+          <div class="event-body">
+            <div class="event-title">壽清庵 茶室 淺草</div>
+            <div class="event-sub">Taito City, Tokyo　09:00–18:00</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/xjyj6A37sFs5Z9Pv6" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--food">餐飲</div>
+        </div>
+        <div class="event">
+          <div class="event-time">14:20</div>
+          <div class="event-body">
+            <div class="event-title">🚢 隅田川水上巴士</div>
+            <div class="event-sub">Asakusa 淺草 ➡ Hinode Pier 日之出碼頭</div>
+            <div class="event-sub">大人 2 名 ／ 予約番号：720737</div>
+            <div class="event-price">¥1,000 ／人</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/dvMQZ4Y3uTm8zH1a6" target="_blank" rel="noopener">淺草乘船處 ↗</a>
+            <a class="event-map-link" href="https://maps.app.goo.gl/kKMnqivDb2yrE7iH7" target="_blank" rel="noopener">日之出碼頭 ↗</a>
+          </div>
+          <div class="event-tag event-tag--flight">交通</div>
+        </div>
+        <div class="event">
+          <div class="event-time">下午</div>
+          <div class="event-body">
+            <div class="event-title">遠眺東京鐵塔</div>
+            <div class="event-sub">日之出棧橋碼頭附近</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=東京鐵塔" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">傍晚</div>
+          <div class="event-body">
+            <div class="event-title">東京車站</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=東京車站" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">傍晚</div>
+          <div class="event-body">
+            <div class="event-title">無印良品 銀座旗艦店</div>
+            <div class="event-sub">無印良品 銀座旗艦店 · Chuo City, Tokyo</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=無印良品+銀座旗艦店" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">購物</div>
+        </div>
+        <div class="event">
+          <div class="event-time">夜</div>
+          <div class="event-body">
+            <div class="event-title">🛏 返回飯店</div>
+            <div class="event-sub">上野御徒町東誠可可尼飯店</div>
+          </div>
+          <div class="event-tag event-tag--hotel">住宿</div>
+        </div>
+      </div>
+      <button class="add-event-btn" onclick="addEvent('day-3')">＋ 新增行程</button>
+    </div>
+
+    <!-- ── DAY 4 · 8/15 新宿 ── -->
+    <div class="day-block">
+      <div class="day-heading">
+        <div class="day-num">04</div>
+        <div class="day-meta">
+          <div class="day-date">8 月 15 日</div>
+          <div class="day-week">週六</div>
+        </div>
+        <div class="day-theme">新宿</div>
+      </div>
+      <div class="timeline" id="day-4">
+        <div class="event">
+          <div class="event-time">10:00</div>
+          <div class="event-body">
+            <div class="event-title">東京牛奶起司工坊</div>
+            <div class="event-sub">Tokyo Milk Cheese Factory · LUMINE 1 Shinjuku · Shinjuku City, Tokyo</div>
+            <div class="event-sub">10:00–21:00　JR 新宿站</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/wNwXZmfKh9oSAoGy8" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--food">餐飲</div>
+        </div>
+        <div class="event">
+          <div class="event-time">10:00</div>
+          <div class="event-body">
+            <div class="event-title">AFURI 新宿</div>
+            <div class="event-sub">AFURI 新宿 · Shinjuku City, Tokyo</div>
+            <div class="event-sub">10:00–22:00　JR 新宿站</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/TW4KzWikhgwjqNRFA" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--food">餐飲</div>
+        </div>
+        <div class="event">
+          <div class="event-time">傍晚</div>
+          <div class="event-body">
+            <div class="event-title">谷中銀座</div>
+            <div class="event-sub">JR 日暮里站</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=谷中銀座" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">晚上</div>
+          <div class="event-body">
+            <div class="event-title">阿美橫町夜逛</div>
+            <div class="event-sub">JR 御徒町站</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/RfUZWpWaAhb4JMo67" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">夜</div>
+          <div class="event-body">
+            <div class="event-title">🛏 返回飯店</div>
+            <div class="event-sub">上野御徒町東誠可可尼飯店</div>
+          </div>
+          <div class="event-tag event-tag--hotel">住宿</div>
+        </div>
+      </div>
+      <button class="add-event-btn" onclick="addEvent('day-4')">＋ 新增行程</button>
+    </div>
+
+    <!-- ── DAY 5 · 8/16 豪德寺 / 新宿 ── -->
+    <div class="day-block">
+      <div class="day-heading">
+        <div class="day-num">05</div>
+        <div class="day-meta">
+          <div class="day-date">8 月 16 日</div>
+          <div class="day-week">週日</div>
+        </div>
+        <div class="day-theme">豪德寺 · 新宿</div>
+      </div>
+      <div class="timeline" id="day-5">
+        <div class="event">
+          <div class="event-time">上午</div>
+          <div class="event-body">
+            <div class="event-title">前往豪德寺</div>
+            <div class="transit-note">JR 御徒町站 ➡ JR 新宿站 ➡ 小田急線 豪德寺站</div>
+          </div>
+          <div class="event-tag event-tag--flight">交通</div>
+        </div>
+        <div class="event">
+          <div class="event-time">06:00</div>
+          <div class="event-body">
+            <div class="event-title">豪德寺</div>
+            <div class="event-sub">2 Chome-24-7 Gotokuji, Setagaya City, Tokyo</div>
+            <div class="event-sub">開放 06:00–17:00　※ 寺務所受理 08:00–15:00</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=豪德寺+世田谷" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">17:30</div>
+          <div class="event-body">
+            <div class="event-title">六歌仙</div>
+            <div class="event-price">預約ID：KDEQU5</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/r2LTvPfhLaatkpwm9" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--food">餐飲</div>
+        </div>
+        <div class="event">
+          <div class="event-time">夜</div>
+          <div class="event-body">
+            <div class="event-title">🛏 返回飯店</div>
+            <div class="event-sub">上野御徒町東誠可可尼飯店</div>
+          </div>
+          <div class="event-tag event-tag--hotel">住宿</div>
+        </div>
+      </div>
+      <button class="add-event-btn" onclick="addEvent('day-5')">＋ 新增行程</button>
+    </div>
+
+    <!-- ── DAY 6 · 8/17 富士山 ── -->
+    <div class="day-block">
+      <div class="day-heading">
+        <div class="day-num">06</div>
+        <div class="day-meta">
+          <div class="day-date">8 月 17 日</div>
+          <div class="day-week">週一</div>
+        </div>
+        <div class="day-theme">富士山 🗻</div>
+      </div>
+      <div class="timeline" id="day-6">
+        <div class="event">
+          <div class="event-time">08:30</div>
+          <div class="event-body">
+            <div class="event-title">🚆 新宿 ➡ 河口湖（FUJI EXCURSION 7）</div>
+            <div class="transit-note">新宿 08:30 發車 ➡ 河口湖 10:26 抵達（1小時56分）· CAR3, 3A｜CAR3, 3B</div>
+          </div>
+          <div class="event-tag event-tag--flight">交通</div>
+        </div>
+        <div class="event">
+          <div class="event-time">全日</div>
+          <div class="event-body">
+            <div class="event-title">河口湖 · 本町商店街</div>
+            <div class="event-sub">富士急行線 ➡ 下吉田站 ➡ 步行 10 分鐘</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/fnDuq2pjBRoS6kbEA" target="_blank" rel="noopener">河口湖 ↗</a>
+            <a class="event-map-link" href="https://maps.app.goo.gl/M7TG6fzNQf5yfwE29" target="_blank" rel="noopener">本町商店街 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">全日</div>
+          <div class="event-body">
+            <div class="event-title">淺間神社</div>
+            <div class="event-sub">富士急行線 ➡ 下吉田站 ➡ 步行 5 分鐘</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/KW1y4NryYtVU4VfE6" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">17:41</div>
+          <div class="event-body">
+            <div class="event-title">🚆 河口湖 ➡ 新宿（富士回遊號 48）</div>
+            <div class="transit-note">河口湖 17:41 發車 ➡ 新宿 19:48 抵達（2小時7分）· CAR3, 5A｜CAR3, 5B</div>
+          </div>
+          <div class="event-tag event-tag--flight">交通</div>
+        </div>
+        <div class="event">
+          <div class="event-time">夜</div>
+          <div class="event-body">
+            <div class="event-title">🛏 返回飯店</div>
+            <div class="event-sub">上野御徒町東誠可可尼飯店</div>
+          </div>
+          <div class="event-tag event-tag--hotel">住宿</div>
+        </div>
+      </div>
+      <button class="add-event-btn" onclick="addEvent('day-6')">＋ 新增行程</button>
+    </div>
+
+    <!-- ── DAY 7 · 8/18 迪士尼海洋 ── -->
+    <div class="day-block">
+      <div class="day-heading">
+        <div class="day-num">07</div>
+        <div class="day-meta">
+          <div class="day-date">8 月 18 日</div>
+          <div class="day-week">週二</div>
+        </div>
+        <div class="day-theme">東京迪士尼海洋</div>
+      </div>
+      <div class="timeline" id="day-7">
+        <div class="event">
+          <div class="event-time">早上</div>
+          <div class="event-body">
+            <div class="event-title">前往東京迪士尼海洋</div>
+            <div class="transit-note">JR 御徒町站 ➡ JR 東京站 ➡ JR 舞濱站 ➡ 度假區總站 ➡ 東京迪士尼海洋站</div>
+          </div>
+          <div class="event-tag event-tag--flight">交通</div>
+        </div>
+        <div class="event">
+          <div class="event-time">09:00</div>
+          <div class="event-body">
+            <div class="event-title">🎡 東京迪士尼海洋</div>
+            <div class="event-sub">Tokyo DisneySea · Urayasu City, Chiba</div>
+            <div class="event-sub">09:00–21:00</div>
+            <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=東京迪士尼海洋" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">景點</div>
+        </div>
+        <div class="event">
+          <div class="event-time">夜</div>
+          <div class="event-body">
+            <div class="event-title">🛏 返回飯店</div>
+            <div class="event-sub">上野御徒町東誠可可尼飯店</div>
+          </div>
+          <div class="event-tag event-tag--hotel">住宿</div>
+        </div>
+      </div>
+      <button class="add-event-btn" onclick="addEvent('day-7')">＋ 新增行程</button>
+    </div>
+
+    <!-- ── DAY 8 · 8/19 返台 ── -->
+    <div class="day-block">
+      <div class="day-heading">
+        <div class="day-num">08</div>
+        <div class="day-meta">
+          <div class="day-date">8 月 19 日</div>
+          <div class="day-week">週三</div>
+        </div>
+        <div class="day-theme">返台</div>
+      </div>
+      <div class="timeline" id="day-8">
+        <div class="event">
+          <div class="event-time">10:00</div>
+          <div class="event-body">
+            <div class="event-title">退房</div>
+            <div class="event-sub">Tosei Hotel Cocone Ueno Okachimachi</div>
+          </div>
+          <div class="event-tag event-tag--hotel">住宿</div>
+        </div>
+        <div class="event">
+          <div class="event-time">11:20</div>
+          <div class="event-body">
+            <div class="event-title">抵達 HND 東京羽田機場</div>
+            <div class="event-sub">請於 11:20 前到達機場辦理登機</div>
+          </div>
+          <div class="event-tag event-tag--flight">航班</div>
+        </div>
+        <div class="event">
+          <div class="event-time">13:20</div>
+          <div class="event-body">
+            <div class="event-title">出發 ✈ HND 東京羽田機場</div>
+            <div class="event-sub">ANA NH853</div>
+          </div>
+          <div class="event-tag event-tag--flight">航班</div>
+        </div>
+        <div class="event">
+          <div class="event-time">15:50</div>
+          <div class="event-body">
+            <div class="event-title">抵達 TSA 台北松山機場 T1</div>
+            <div class="event-sub">返台 · 旅程結束</div>
+          </div>
+          <div class="event-tag event-tag--flight">航班</div>
+        </div>
+      </div>
+      <button class="add-event-btn" onclick="addEvent('day-8')">＋ 新增行程</button>
+    </div>
+
+  </main>
+
+  <footer class="footer">東京 · 上野 · 2026 · 夏</footer>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAxAqkBGm1dLp7duLOhxwmUhoCBDb-2d5U",
+      authDomain: "tokyo-2026-d1747.firebaseapp.com",
+      databaseURL: "https://tokyo-2026-d1747-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "tokyo-2026-d1747",
+      storageBucket: "tokyo-2026-d1747.firebasestorage.app",
+      messagingSenderId: "92095562028",
+      appId: "1:92095562028:web:e98298d6c394dae4316c89"
+    };
+    const fbApp = initializeApp(firebaseConfig);
+    const db = getDatabase(fbApp);
+    const FB_KEY = 'itinerary';
+
+    const STORAGE_KEY = 'tokyo-itinerary-v4';
+    let hasPending = false;
+    let pendingSnapshot = null;
+
+    function takeSnapshot() {
+      pendingSnapshot = {};
+      document.querySelectorAll('.timeline[id]').forEach(tl => {
+        const clone = tl.cloneNode(true);
+        clone.querySelectorAll('.event-actions').forEach(el => el.remove());
+        clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+        clone.querySelectorAll('.event').forEach(el => {
+          el.classList.remove('editing', 'pending-delete', 'pending-new');
+        });
+        pendingSnapshot[tl.id] = clone.innerHTML;
+      });
+    }
+
+    function snapshotIfClean() {
+      if (!hasPending) takeSnapshot();
+    }
+
+    // ── 確認列顯示 / 隱藏 ──
+    function setPending(on) {
+      hasPending = on;
+      document.getElementById('confirm-bar').classList.toggle('show', on);
+    }
+
+    // ── 確定儲存 ──
+    function confirmSave() {
+      // 清除 editing 狀態與暫時 class，不存入 DOM
+      document.querySelectorAll('.event.editing').forEach(el => el.classList.remove('editing'));
+      document.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+      document.querySelectorAll('.event-actions').forEach(el => el.remove());
+
+      const data = {};
+      document.querySelectorAll('.timeline[id]').forEach(tl => {
+        data[tl.id] = tl.innerHTML;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+      document.querySelectorAll('.event').forEach(initEvent);
+      setPending(false);
+      showToast();
+    }
+
+    // ── 取消：從 localStorage 還原 ──
+    function cancelSave() {
+      load();
+      document.querySelectorAll('.event').forEach(initEvent);
+      setPending(false);
+    }
+
+    // ── 初始化每個 event：鎖定欄位 + 加按鈕 ──
+    function initEvent(eventEl) {
+      eventEl.querySelectorAll('.event-title, .event-sub, .event-time, .transit-note').forEach(el => {
+        el.contentEditable = 'false';
+      });
+      if (eventEl.querySelector('.event-actions')) return;
+
+      const actions = document.createElement('div');
+      actions.className = 'event-actions';
+
+      const editBtn = document.createElement('button');
+      editBtn.className = 'event-edit';
+      editBtn.title = '編輯';
+      editBtn.innerHTML = '✏';
+      editBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        toggleEdit(eventEl);
+      });
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'event-del';
+      delBtn.title = '刪除';
+      delBtn.textContent = '×';
+      delBtn.addEventListener('click', () => {
+        snapshotIfClean();
+        eventEl.classList.add('pending-delete');
+        setPending(true);
+      });
+
+      const upBtn = document.createElement('button');
+      upBtn.className = 'event-move';
+      upBtn.title = '上移';
+      upBtn.textContent = '↑';
+      upBtn.addEventListener('click', () => {
+        const prev = eventEl.previousElementSibling;
+        if (prev && prev.classList.contains('event')) {
+          snapshotIfClean();
+          eventEl.parentNode.insertBefore(eventEl, prev);
+          setPending(true);
+        }
+      });
+
+      const downBtn = document.createElement('button');
+      downBtn.className = 'event-move';
+      downBtn.title = '下移';
+      downBtn.textContent = '↓';
+      downBtn.addEventListener('click', () => {
+        const next = eventEl.nextElementSibling;
+        if (next && next.classList.contains('event')) {
+          snapshotIfClean();
+          eventEl.parentNode.insertBefore(next, eventEl);
+          setPending(true);
+        }
+      });
+
+      actions.appendChild(upBtn);
+      actions.appendChild(editBtn);
+      actions.appendChild(downBtn);
+      actions.appendChild(delBtn);
+      eventEl.appendChild(actions);
+    }
+
+    function toggleEdit(eventEl) {
+      const isEditing = !eventEl.classList.contains('editing');
+      if (isEditing) {
+        snapshotIfClean();
+        // 進入編輯：備份原始內容
+        eventEl._backup = {};
+        eventEl.querySelectorAll('.event-title, .event-sub, .event-time, .transit-note').forEach(el => {
+          eventEl._backup[el.className] = el.innerHTML;
+          el.contentEditable = 'true';
+        });
+        eventEl.classList.add('editing');
+        eventEl.querySelector('.event-title')?.focus();
+        setPending(true);
+      } else {
+        // 關閉編輯模式（不觸發儲存，由確定按鈕負責）
+        eventEl.classList.remove('editing');
+        eventEl.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+      }
+    }
+
+    // ── 載入 ──
+    function applyData(data) {
+      Object.entries(data).forEach(([id, html]) => {
+        const tl = document.getElementById(id);
+        if (tl) tl.innerHTML = html;
+      });
+      document.querySelectorAll('.event').forEach(initEvent);
+    }
+
+    function load() {
+      // 先嘗試 Firebase，失敗時 fallback 到 localStorage
+      get(ref(db, FB_KEY)).then(snapshot => {
+        if (snapshot.exists()) {
+          applyData(snapshot.val());
+        } else {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) applyData(JSON.parse(raw));
+        }
+      }).catch(() => {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) applyData(JSON.parse(raw));
+      });
+    }
+
+    // ── Toast ──
+    function showToast() {
+      const t = document.getElementById('save-toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 1800);
+    }
+
+    // ── 新增行程 ──
+    function addEvent(dayId) {
+      const time = prompt('時間（例：14:00）', '');
+      if (time === null) return;
+      const title = prompt('行程名稱', '');
+      if (!title) return;
+      const note = prompt('備註（可留空）', '') || '';
+
+      const container = document.getElementById(dayId);
+      snapshotIfClean();
+      const el = document.createElement('div');
+      el.className = 'event pending-new';
+      el.innerHTML = `
+        <div class="event-time">${time}</div>
+        <div class="event-body">
+          <div class="event-title">${title}</div>
+          <div class="event-sub">${note}</div>
+        </div>
+      `;
+      container.appendChild(el);
+      initEvent(el);
+      setPending(true);
+    }
+
+    // ── 確定：移除待刪、清除待新標記，然後儲存 ──
+    function doConfirm() {
+      document.querySelectorAll('.event.pending-delete').forEach(el => el.remove());
+      document.querySelectorAll('.event.pending-new').forEach(el => el.classList.remove('pending-new'));
+      document.querySelectorAll('.event.editing').forEach(el => el.classList.remove('editing'));
+      document.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+      document.querySelectorAll('.event-actions').forEach(el => el.remove());
+
+      const data = {};
+      document.querySelectorAll('.timeline[id]').forEach(tl => {
+        data[tl.id] = tl.innerHTML;
+      });
+      // 同時寫入 localStorage 和 Firebase
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      set(ref(db, FB_KEY), data);
+      pendingSnapshot = null;
+      document.querySelectorAll('.event').forEach(initEvent);
+      setPending(false);
+      showToast();
+    }
+
+    // ── 取消：從快照還原整個 timeline（包含順序、內容、刪除/新增）──
+    function doCancel() {
+      if (pendingSnapshot) {
+        Object.entries(pendingSnapshot).forEach(([id, html]) => {
+          const tl = document.getElementById(id);
+          if (tl) tl.innerHTML = html;
+        });
+        pendingSnapshot = null;
+      }
+      document.querySelectorAll('.event').forEach(initEvent);
+      hasPending = false;
+      document.getElementById('confirm-bar').classList.remove('show');
+    }
+
+    // ── 初始化 ──
+    load();
+  </script>
+
+  <!-- 確認列 -->
+  <div id="confirm-bar">
+    <span class="confirm-hint">有未儲存的變更</span>
+    <button class="confirm-btn confirm-ok" onclick="doConfirm()">確定</button>
+    <button class="confirm-btn confirm-cancel" onclick="doCancel()">取消</button>
+  </div>
+
+  <!-- 儲存 Toast -->
+  <div id="save-toast">已儲存</div>
+
+  <style>
+    /* ── 確認列 ── */
+    #confirm-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      display: none; align-items: center; justify-content: center;
+      gap: 0.75rem;
+      background: var(--white); border-top: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+      z-index: 200;
+    }
+    #confirm-bar.show { display: flex; }
+    .confirm-hint {
+      font-size: 0.75rem; letter-spacing: 0.1em; color: var(--ink-faint);
+      margin-right: 0.5rem;
+    }
+    .confirm-btn {
+      font-size: 0.78rem; letter-spacing: 0.1em;
+      padding: 0.4rem 1.2rem; border-radius: 1px; cursor: pointer;
+      font-family: 'Noto Sans TC', sans-serif;
+      transition: background 0.15s;
+    }
+    .confirm-ok {
+      background: var(--accent); color: var(--white); border: none;
+    }
+    .confirm-ok:hover { background: var(--ink); }
+    .confirm-cancel {
+      background: none; color: var(--ink-light);
+      border: 1px solid var(--border);
+    }
+    .confirm-cancel:hover { border-color: var(--ink-light); }
+
+    /* ── Toast ── */
+    #save-toast {
+      position: fixed; bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--accent); color: var(--white);
+      font-size: 0.72rem; letter-spacing: 0.15em;
+      padding: 0.45rem 1.2rem; border-radius: 2px;
+      opacity: 0; transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none; z-index: 999;
+    }
+    #save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Event ── */
+    .event { position: relative; }
+    .event-tag { display: none; }
+
+    .event-actions {
+      display: none; flex-direction: column;
+      align-items: center; gap: 2px;
+      position: absolute; top: 50%; right: 0;
+      transform: translateY(-50%);
+    }
+    .event:hover .event-actions,
+    .event.editing .event-actions { display: flex; }
+
+    .event-edit, .event-del, .event-move {
+      background: none; border: none;
+      cursor: pointer; padding: 0.15rem 0.35rem;
+      line-height: 1; font-size: 0.8rem;
+      color: var(--ink-faint); transition: color 0.15s;
+    }
+    .event-edit:hover { color: var(--accent); }
+    .event-del:hover  { color: var(--red); }
+    .event-move:hover { color: var(--accent); }
+    .event.editing .event-edit { color: var(--accent); }
+
+    .event.editing [contenteditable='true'] {
+      outline: 1px dashed var(--accent-light); border-radius: 1px;
+    }
+    .event.editing [contenteditable='true']:focus {
+      outline: 1px solid var(--accent); background: var(--white);
+    }
+
+    /* ── 待刪除視覺提示 ── */
+    .event.pending-delete {
+      opacity: 0.35;
+      text-decoration: line-through;
+      text-decoration-color: var(--red);
+    }
+    /* ── 待新增視覺提示 ── */
+    .event.pending-new {
+      background: var(--accent-pale);
+    }
+  </style>
+</body>
+</html>
