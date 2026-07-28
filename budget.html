@@ -335,6 +335,9 @@
       render();
     }
 
+    window.addExpense = addExpense;
+    window.delExpense = delExpense;
+
     document.getElementById('rate').addEventListener('input', render);
 
     const amountInput = document.getElementById('inp-amount');

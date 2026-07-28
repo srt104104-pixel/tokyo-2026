@@ -767,6 +767,11 @@
 
     // ── 初始化 ──
     load();
+
+    // 讓 onclick 可以呼叫
+    window.doConfirm = doConfirm;
+    window.doCancel = doCancel;
+    window.addEvent = addEvent;
   </script>
 
   <!-- 確認列 -->
