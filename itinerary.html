@@ -868,6 +868,11 @@
     .event.pending-new {
       background: var(--accent-pale);
     }
+
+    /* 觸控裝置：按鈕一直顯示 */
+    @media (hover: none) {
+      .event-actions { display: flex; }
+    }
   </style>
 </body>
 </html>
