@@ -1,0 +1,757 @@
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #f5f0e8;
+  --paper: #ede8dc;
+  --ink: #2c2419;
+  --ink-light: #6b5f52;
+  --ink-faint: #a89e92;
+  --accent: #8b6f47;
+  --accent-light: #c4a882;
+  --accent-pale: #f0e8d8;
+  --border: #d8cfc3;
+  --white: #fdfaf5;
+  --red: #c0392b;
+  --green: #5a7a5a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  font-weight: 300;
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 56px;
+}
+
+.nav-logo {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 300;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+}
+
+.nav-links { display: flex; gap: 2rem; }
+
+.nav-link {
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-light);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── Home ── */
+.home {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 2rem 4rem;
+}
+
+.hero-text {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.hero-subtitle {
+  font-size: 0.78rem;
+  letter-spacing: 0.35em;
+  color: var(--ink-faint);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-en {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  color: var(--ink-faint);
+}
+
+/* ── Cards row ── */
+.cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 700px) {
+  .cards-row { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-light), transparent);
+}
+
+.card-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.card-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.card-weekday {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  margin-left: 0.3em;
+  vertical-align: middle;
+}
+
+/* Flight card */
+.flight-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.flight-port { flex: 1; }
+.flight-port--right { text-align: right; }
+
+.flight-time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.flight-code {
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-top: 0.2rem;
+}
+
+.flight-name {
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  margin-top: 0.15rem;
+}
+
+.flight-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ink-faint);
+  flex: 0 0 auto;
+}
+
+.flight-line {
+  width: 30px;
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 2px;
+}
+
+.flight-no {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--border);
+  padding-top: 0.6rem;
+  margin-top: 0.3rem;
+}
+
+/* Hotel card */
+.hotel-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+}
+
+.hotel-zh {
+  font-size: 0.78rem;
+  color: var(--ink-light);
+  margin-bottom: 1rem;
+}
+
+.hotel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.73rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.hotel-loc {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--border);
+  padding-top: 0.6rem;
+}
+
+/* ── Home nav buttons ── */
+.home-nav {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.home-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1.5rem 2.5rem;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  min-width: 110px;
+}
+
+.home-btn:hover {
+  background: var(--accent-pale);
+  border-color: var(--accent-light);
+  transform: translateY(-2px);
+}
+
+.btn-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.btn-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-light);
+}
+
+/* ── Itinerary page ── */
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-header .page-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 300;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+}
+
+.page-header .page-zh {
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  color: var(--ink-faint);
+  margin-top: 0.4rem;
+}
+
+/* Day block */
+.day-block {
+  margin-bottom: 2.5rem;
+}
+
+.day-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.day-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.day-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.day-date {
+  font-size: 0.82rem;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.day-week {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+.timeline {
+  border-left: 1px solid var(--border);
+  padding-left: 1.5rem;
+  margin-left: 0.5rem;
+}
+
+.event {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed var(--border);
+  position: relative;
+}
+
+.event::before {
+  content: '';
+  position: absolute;
+  left: -1.6rem;
+  top: 1.1rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+}
+
+.event-time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  color: var(--ink-faint);
+  min-width: 50px;
+  padding-top: 1px;
+}
+
+.event-body { flex: 1; }
+
+.event-title {
+  font-size: 0.88rem;
+  color: var(--ink);
+  font-weight: 400;
+  margin-bottom: 0.15rem;
+}
+
+.event-sub {
+  font-size: 0.73rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+}
+
+.event-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1px;
+  background: var(--accent-pale);
+  color: var(--accent);
+  align-self: flex-start;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.event-tag--flight { background: #e8f0f8; color: #4a6fa5; }
+.event-tag--food   { background: #f0ece4; color: #8b6f47; }
+.event-tag--hotel  { background: #e8ede8; color: #5a7a5a; }
+.event-tag--spot   { background: #ede8f0; color: #7a5a8b; }
+
+/* Editable events */
+.event-title[contenteditable="true"]:focus,
+.event-sub[contenteditable="true"]:focus {
+  outline: none;
+  border-bottom: 1px solid var(--accent-light);
+}
+
+/* Add event button */
+.add-event-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px dashed var(--border);
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.add-event-btn:hover { color: var(--accent); border-color: var(--accent-light); }
+
+/* ── Budget page ── */
+.budget-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 600px) {
+  .budget-summary { grid-template-columns: 1fr 1fr; }
+}
+
+.sum-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1.2rem 1.25rem;
+  text-align: center;
+}
+
+.sum-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.sum-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.7rem;
+  font-weight: 300;
+  color: var(--ink);
+}
+
+.sum-amount.negative { color: var(--red); }
+.sum-amount.positive { color: var(--green); }
+
+.sum-currency {
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  margin-left: 2px;
+}
+
+/* Add expense form */
+.expense-form {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr 1fr; }
+}
+
+.form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.form-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+}
+
+.form-input, .form-select {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 1px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--ink);
+  font-weight: 300;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--accent-light);
+  background: var(--white);
+}
+
+.form-btn {
+  background: var(--accent);
+  color: var(--white);
+  border: none;
+  border-radius: 1px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  font-family: 'Noto Sans TC', sans-serif;
+  transition: background 0.2s;
+  height: fit-content;
+}
+
+.form-btn:hover { background: var(--ink); }
+
+/* Expense list */
+.expense-list { margin-bottom: 1.5rem; }
+
+.expense-group-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  padding: 0.5rem 0 0.4rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.25rem;
+}
+
+.expense-item {
+  display: flex;
+  align-items: center;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px dashed var(--border);
+  gap: 0.75rem;
+}
+
+.expense-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  flex-shrink: 0;
+}
+
+.expense-desc { flex: 1; font-size: 0.85rem; color: var(--ink); }
+
+.expense-cat {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  background: var(--paper);
+  padding: 0.1rem 0.4rem;
+  border-radius: 1px;
+}
+
+.expense-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  color: var(--ink);
+  min-width: 80px;
+  text-align: right;
+}
+
+.expense-currency {
+  font-size: 0.65rem;
+  color: var(--ink-faint);
+  margin-left: 2px;
+}
+
+.expense-del {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+  padding: 0.1rem 0.3rem;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.expense-del:hover { color: var(--red); }
+
+/* ── Checklist page ── */
+.checklist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .checklist-grid { grid-template-columns: 1fr; }
+}
+
+.checklist-section {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1.5rem;
+}
+
+.section-title {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+
+.check-item:last-child { border-bottom: none; }
+
+.check-box {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--border);
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+  font-size: 0.65rem;
+  color: transparent;
+}
+
+.check-item.checked .check-box {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+}
+
+.check-label {
+  font-size: 0.83rem;
+  color: var(--ink);
+  transition: color 0.15s;
+}
+
+.check-item.checked .check-label {
+  color: var(--ink-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--accent-light);
+}
+
+.check-progress {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  margin-top: 0.75rem;
+  text-align: right;
+}
+
+/* Add checklist item */
+.check-add-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.check-add-input {
+  flex: 1;
+  background: var(--cream);
+  border: 1px dashed var(--border);
+  border-radius: 1px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.78rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--ink);
+}
+
+.check-add-input:focus { outline: none; border-color: var(--accent-light); }
+
+.check-add-btn {
+  background: none;
+  border: 1px dashed var(--border);
+  color: var(--ink-faint);
+  font-size: 1rem;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.check-add-btn:hover { color: var(--accent); border-color: var(--accent-light); }
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--border);
+}

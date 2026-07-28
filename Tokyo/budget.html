@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>記帳 · 東京 2026</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="nav">
+    <span class="nav-logo">東京 · 2026</span>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">首頁</a>
+      <a href="itinerary.html" class="nav-link">行程</a>
+      <a href="budget.html" class="nav-link active">記帳</a>
+      <a href="checklist.html" class="nav-link">清單</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="page-header">
+      <div class="page-en">Budget</div>
+      <div class="page-zh">旅行記帳</div>
+    </div>
+
+    <!-- Summary cards -->
+    <div class="budget-summary">
+      <div class="sum-card">
+        <div class="sum-label">總支出</div>
+        <div class="sum-amount negative" id="total-jpy">0<span class="sum-currency">JPY</span></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-label">折合台幣</div>
+        <div class="sum-amount negative" id="total-twd">0<span class="sum-currency">TWD</span></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-label">筆數</div>
+        <div class="sum-amount" id="total-count">0<span class="sum-currency">筆</span></div>
+      </div>
+    </div>
+
+    <!-- Add expense form -->
+    <div class="expense-form">
+      <div class="form-title">新增支出</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">項目</label>
+          <input class="form-input" id="inp-desc" type="text" placeholder="例：築地早餐" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">幣別</label>
+          <select class="form-select" id="inp-currency">
+            <option value="JPY">日幣 JPY</option>
+            <option value="TWD">台幣 TWD</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">金額</label>
+          <input class="form-input" id="inp-amount" type="text" inputmode="numeric" placeholder="0" style="ime-mode:disabled;" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">性質</label>
+          <select class="form-select" id="inp-shared">
+            <option value="shared">共同</option>
+            <option value="personal">個人</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">付款人</label>
+          <select class="form-select" id="inp-person">
+            <option value="">—</option>
+            <option value="牛">牛</option>
+            <option value="47">47</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">類別</label>
+          <select class="form-select" id="inp-cat">
+            <option>餐飲</option>
+            <option>交通</option>
+            <option>景點</option>
+            <option>購物</option>
+            <option>住宿</option>
+            <option>其他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">日期</label>
+          <select class="form-select" id="inp-day">
+            <option value="">—</option>
+            <option value="8/12">8/12 週三</option>
+            <option value="8/13">8/13 週四</option>
+            <option value="8/14">8/14 週五</option>
+            <option value="8/15">8/15 週六</option>
+            <option value="8/16">8/16 週日</option>
+            <option value="8/17">8/17 週一</option>
+            <option value="8/18">8/18 週二</option>
+            <option value="8/19">8/19 週三</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:0.75rem;display:flex;gap:0.75rem;align-items:center;">
+        <button class="form-btn" onclick="addExpense()">記帳</button>
+        <span style="font-size:0.68rem;color:var(--ink-faint);letter-spacing:0.08em;">
+          匯率參考：1 JPY ≈ <input id="rate" type="number" value="0.215" step="0.001" style="width:60px;background:var(--cream);border:1px solid var(--border);border-radius:1px;padding:0.1rem 0.3rem;font-size:0.78rem;font-family:'Noto Sans TC',sans-serif;color:var(--ink);" /> TWD
+        </span>
+      </div>
+    </div>
+
+    <!-- Expense list -->
+    <div id="expense-list" class="expense-list">
+      <div style="text-align:center;padding:2rem;font-size:0.78rem;color:var(--ink-faint);letter-spacing:0.15em;">
+        尚無記錄　—　新增第一筆支出
+      </div>
+    </div>
+
+    <!-- Category breakdown -->
+    <div id="breakdown" style="display:none;margin-top:1.5rem;">
+      <div class="expense-group-label">類別分析</div>
+      <div id="breakdown-bars"></div>
+    </div>
+
+    <!-- Person breakdown -->
+    <div id="person-breakdown" style="display:none;margin-top:1.5rem;">
+      <div class="expense-group-label">付款人統計</div>
+      <div id="person-bars"></div>
+      <div id="settle" style="margin-top:1rem;padding:0.75rem 1rem;background:var(--paper);border-left:2px solid var(--accent-light);font-size:0.8rem;letter-spacing:0.06em;color:var(--ink);"></div>
+    </div>
+  </main>
+
+  <footer class="footer">東京 · 上野 · 2026 · 夏</footer>
+
+  <script>
+    let expenses = JSON.parse(localStorage.getItem('tokyo-expenses') || '[]');
+    expenses.forEach(e => { if (!e.currency) e.currency = 'JPY'; });
+
+    function save() {
+      localStorage.setItem('tokyo-expenses', JSON.stringify(expenses));
+    }
+
+    function getRate() {
+      return parseFloat(document.getElementById('rate').value) || 0.215;
+    }
+
+    function fmt(n) {
+      return n.toLocaleString('zh-TW');
+    }
+
+    function toTwd(e) {
+      return e.currency === 'TWD' ? e.amount : Math.round(e.amount * getRate());
+    }
+
+    function amountLabel(e) {
+      return e.currency === 'TWD'
+        ? `NT$${fmt(e.amount)}<span class="expense-currency">TWD</span>`
+        : `¥${fmt(e.amount)}<span class="expense-currency">JPY</span>`;
+    }
+
+    function render() {
+      const list = document.getElementById('expense-list');
+      const rate = getRate();
+      const totalTwd = expenses.reduce((s, e) => s + toTwd(e), 0);
+      const totalJpy = expenses.reduce((s, e) => s + (e.currency === 'TWD' ? 0 : e.amount), 0);
+
+      document.getElementById('total-jpy').innerHTML = fmt(totalJpy) + '<span class="sum-currency">JPY</span>';
+      document.getElementById('total-twd').innerHTML = fmt(totalTwd) + '<span class="sum-currency">TWD</span>';
+      document.getElementById('total-count').innerHTML = expenses.length + '<span class="sum-currency">筆</span>';
+
+      if (expenses.length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:2rem;font-size:0.78rem;color:var(--ink-faint);letter-spacing:0.15em;">尚無記錄　—　新增第一筆支出</div>';
+        document.getElementById('breakdown').style.display = 'none';
+        return;
+      }
+
+      // Group by day
+      const byDay = {};
+      expenses.forEach((e, i) => {
+        const key = e.day || '—';
+        if (!byDay[key]) byDay[key] = [];
+        byDay[key].push({ ...e, idx: i });
+      });
+
+      let html = '';
+      for (const day of Object.keys(byDay).sort()) {
+        const dayTwd = byDay[day].reduce((s, e) => s + toTwd(e), 0);
+        const label = day === '—' ? '—' : day;
+        html += `<div class="expense-group-label">${label} &nbsp;—&nbsp; NT$${fmt(dayTwd)}</div>`;
+        for (const e of byDay[day]) {
+          html += `
+            <div class="expense-item">
+              <div class="expense-dot"></div>
+              <div class="expense-desc">${e.desc}</div>
+              <div class="expense-cat">${e.cat}</div>
+              ${e.shared === 'personal' ? `<div class="expense-cat" style="color:var(--ink-faint);font-size:0.65rem;">個人</div>` : ''}
+              ${e.person ? `<div class="expense-cat" style="color:var(--ink-faint);">${e.person}</div>` : ''}
+              <div class="expense-amount">${amountLabel(e)}</div>
+              <button class="expense-del" onclick="delExpense(${e.idx})" title="刪除">×</button>
+            </div>`;
+        }
+      }
+      list.innerHTML = html;
+
+      // Breakdown（以台幣換算）
+      const byCat = {};
+      expenses.forEach(e => { byCat[e.cat] = (byCat[e.cat] || 0) + toTwd(e); });
+      const maxVal = Math.max(...Object.values(byCat));
+      let bars = '';
+      for (const [cat, val] of Object.entries(byCat).sort((a,b) => b[1]-a[1])) {
+        const pct = Math.round(val / totalTwd * 100);
+        const w = Math.round(val / maxVal * 100);
+        bars += `
+          <div style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0;border-bottom:1px dashed var(--border);">
+            <div style="min-width:40px;font-size:0.72rem;color:var(--ink-faint);">${cat}</div>
+            <div style="flex:1;height:4px;background:var(--paper);border-radius:2px;">
+              <div style="height:100%;width:${w}%;background:var(--accent-light);border-radius:2px;"></div>
+            </div>
+            <div style="font-size:0.78rem;color:var(--ink);font-family:'Cormorant Garamond',serif;min-width:80px;text-align:right;">NT$${fmt(val)} <span style="color:var(--ink-faint);font-size:0.65rem;">${pct}%</span></div>
+          </div>`;
+      }
+      document.getElementById('breakdown-bars').innerHTML = bars;
+      document.getElementById('breakdown').style.display = 'block';
+
+      // ── 付款人統計 ──
+      const PERSONS = ['牛', '47'];
+      const byPerson = {};       // 各人總付出（含個人）
+      const byPersonShared = {}; // 各人共同支出
+      PERSONS.forEach(p => { byPerson[p] = 0; byPersonShared[p] = 0; });
+      expenses.forEach(e => {
+        if (e.person && byPerson[e.person] !== undefined) {
+          byPerson[e.person] += toTwd(e);
+          if (!e.shared || e.shared === 'shared') {
+            byPersonShared[e.person] += toTwd(e);
+          }
+        }
+      });
+
+      const personExpenses = PERSONS.filter(p => byPerson[p] > 0);
+      if (personExpenses.length === 0) {
+        document.getElementById('person-breakdown').style.display = 'none';
+        return;
+      }
+
+      const personMax = Math.max(...PERSONS.map(p => byPerson[p]));
+      let pbars = '';
+      PERSONS.forEach(p => {
+        const val = byPerson[p];
+        const sharedVal = byPersonShared[p];
+        const personalVal = val - sharedVal;
+        const w = personMax > 0 ? Math.round(val / personMax * 100) : 0;
+        pbars += `
+          <div style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0;border-bottom:1px dashed var(--border);">
+            <div style="min-width:28px;font-size:0.78rem;color:var(--ink);font-weight:600;">${p}</div>
+            <div style="flex:1;height:4px;background:var(--paper);border-radius:2px;">
+              <div style="height:100%;width:${w}%;background:var(--accent);border-radius:2px;"></div>
+            </div>
+            <div style="font-size:0.78rem;color:var(--ink);font-family:'Cormorant Garamond',serif;min-width:100px;text-align:right;">NT$${fmt(val)}</div>
+          </div>`;
+      });
+      document.getElementById('person-bars').innerHTML = pbars;
+
+      // ── 結算：只計算共同支出 ──
+      const total = PERSONS.reduce((s, p) => s + byPersonShared[p], 0);
+      const share = Math.round(total / 2);
+      const diff = byPersonShared['牛'] - byPersonShared['47'];
+      let settleText = '';
+      if (total === 0) {
+        settleText = '✦ 尚無共同支出記錄';
+      } else if (Math.abs(diff) < 1) {
+        settleText = `✦ 共同支出 NT$${fmt(total)}，兩人各付 NT$${fmt(share)}，無需結算`;
+      } else if (diff > 0) {
+        settleText = `✦ 共同支出 NT$${fmt(total)}，每人應付 NT$${fmt(share)}<br>47 應付給 牛 &nbsp;NT$${fmt(Math.round(diff / 2))}`;
+      } else {
+        settleText = `✦ 共同支出 NT$${fmt(total)}，每人應付 NT$${fmt(share)}<br>牛 應付給 47 &nbsp;NT$${fmt(Math.round(Math.abs(diff) / 2))}`;
+      }
+      document.getElementById('settle').innerHTML = settleText;
+      document.getElementById('person-breakdown').style.display = 'block';
+    }
+
+    function addExpense() {
+      const desc = document.getElementById('inp-desc').value.trim();
+      const amount = parseInt(document.getElementById('inp-amount').value.replace(/,/g, ''), 10);
+      const currency = document.getElementById('inp-currency').value;
+      const cat = document.getElementById('inp-cat').value;
+      const day = document.getElementById('inp-day').value;
+      const person = document.getElementById('inp-person').value;
+      const shared = document.getElementById('inp-shared').value;
+      if (!desc || !amount || amount <= 0) {
+        alert('請填寫項目與金額');
+        return;
+      }
+      expenses.push({ desc, amount, currency, cat, day, person, shared });
+      save();
+      render();
+      document.getElementById('inp-desc').value = '';
+      amountInput.value = '';
+    }
+
+    function delExpense(idx) {
+      if (!confirm('確定刪除這筆記錄？')) return;
+      expenses.splice(idx, 1);
+      save();
+      render();
+    }
+
+    document.getElementById('rate').addEventListener('input', render);
+
+    const amountInput = document.getElementById('inp-amount');
+    amountInput.addEventListener('input', () => {
+      const raw = amountInput.value.replace(/,/g, '').replace(/[^\d]/g, '');
+      if (raw === '') { amountInput.value = ''; return; }
+      amountInput.value = parseInt(raw, 10).toLocaleString('zh-TW');
+    });
+    amountInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') addExpense();
+    });
+
+    render();
+  </script>
+</body>
+</html>

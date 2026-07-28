@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>清單 · 東京 2026</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    #confirm-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      display: none; align-items: center; justify-content: center;
+      gap: 0.75rem;
+      background: var(--white); border-top: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+      z-index: 200;
+    }
+    #confirm-bar.show { display: flex; }
+    .confirm-hint { font-size: 0.75rem; letter-spacing: 0.1em; color: var(--ink-faint); margin-right: 0.5rem; }
+    .confirm-btn {
+      font-size: 0.78rem; letter-spacing: 0.1em;
+      padding: 0.4rem 1.2rem; border-radius: 1px; cursor: pointer;
+      font-family: 'Noto Sans TC', sans-serif; transition: background 0.15s;
+    }
+    .confirm-ok { background: var(--accent); color: var(--white); border: none; }
+    .confirm-ok:hover { background: var(--ink); }
+    .confirm-cancel { background: none; color: var(--ink-light); border: 1px solid var(--border); }
+    .confirm-cancel:hover { border-color: var(--ink-light); }
+
+    #save-toast {
+      position: fixed; bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--accent); color: var(--white);
+      font-size: 0.72rem; letter-spacing: 0.15em;
+      padding: 0.45rem 1.2rem; border-radius: 2px;
+      opacity: 0; transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none; z-index: 999;
+    }
+    #save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .section-title { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em; color: var(--ink); }
+    .section-edit-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.78rem; color: var(--ink-faint); padding: 0.1rem 0.3rem;
+      transition: color 0.15s;
+    }
+    .section-edit-btn:hover { color: var(--accent); }
+
+    .check-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0; border-bottom: 1px dashed var(--border); cursor: pointer; position: relative; }
+    .check-item.checked .check-label { text-decoration: line-through; color: var(--ink-faint); }
+    .check-box { width: 14px; height: 14px; border: 1px solid var(--border); border-radius: 1px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: var(--accent); flex-shrink: 0; }
+    .check-item.checked .check-box { background: var(--accent-pale); border-color: var(--accent-light); }
+    .check-label { font-size: 0.8rem; letter-spacing: 0.04em; flex: 1; }
+    .check-label[contenteditable='true'] { outline: 1px dashed var(--accent-light); border-radius: 1px; padding: 0 2px; }
+    .check-label[contenteditable='true']:focus { outline: 1px solid var(--accent); background: var(--white); }
+
+    .check-item-del {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.8rem; color: var(--ink-faint); padding: 0 0.2rem;
+      display: none; transition: color 0.15s;
+    }
+    .editing-mode .check-item-del { display: block; }
+    .check-item-del:hover { color: var(--red); }
+
+    .check-progress { font-size: 0.68rem; color: var(--ink-faint); letter-spacing: 0.08em; margin-top: 0.5rem; }
+    .check-add-row { display: flex; gap: 0.4rem; margin-top: 0.6rem; }
+    .check-add-input {
+      flex: 1; font-size: 0.78rem; font-family: 'Noto Sans TC', sans-serif;
+      background: var(--cream); border: 1px solid var(--border); border-radius: 1px;
+      padding: 0.25rem 0.5rem; color: var(--ink); letter-spacing: 0.04em;
+    }
+    .check-add-btn {
+      background: none; border: 1px solid var(--border); border-radius: 1px;
+      cursor: pointer; padding: 0.25rem 0.6rem; font-size: 0.85rem;
+      color: var(--accent); transition: background 0.15s;
+    }
+    .check-add-btn:hover { background: var(--accent-pale); }
+
+    .checklist-section { position: relative; }
+    .checklist-section.editing-mode { background: var(--accent-pale); border-radius: 2px; padding: 0.5rem; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <span class="nav-logo">東京 · 2026</span>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">首頁</a>
+      <a href="itinerary.html" class="nav-link">行程</a>
+      <a href="budget.html" class="nav-link">記帳</a>
+      <a href="checklist.html" class="nav-link active">清單</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="page-header">
+      <div class="page-en">Checklist</div>
+      <div class="page-zh">行前準備清單</div>
+    </div>
+
+    <div class="checklist-grid" id="checklist-grid"></div>
+  </main>
+
+  <footer class="footer">東京 · 上野 · 2026 · 夏</footer>
+
+  <div id="confirm-bar">
+    <span class="confirm-hint">有未儲存的變更</span>
+    <button class="confirm-btn confirm-ok" onclick="doConfirm()">確定</button>
+    <button class="confirm-btn confirm-cancel" onclick="doCancel()">取消</button>
+  </div>
+  <div id="save-toast">已儲存</div>
+
+  <script>
+    const STORAGE_KEY = 'tokyo-checklist';
+
+    const DEFAULT_SECTIONS = [
+      { id: 'docs',        title: '證件 & 文件',   items: ['護照（有效期 6 個月以上）','機票電子票證','飯店訂房確認信','旅遊保險','國際駕照（若需）','緊急聯絡卡'] },
+      { id: 'money',       title: '金錢 & 支付',   items: ['日圓現金','信用卡（VISA / Mastercard）','Suica / PASMO 卡','備用信用卡','零錢包'] },
+      { id: 'electronics', title: '3C & 電子',     items: ['手機 + 充電線','行動電源','相機 + 記憶卡','日本插頭轉接頭','耳機','Wi-Fi 分享器 / SIM 卡'] },
+      { id: 'clothes',     title: '衣物 & 盥洗',   items: ['換洗衣物（7套）','薄外套 / 風衣','舒適步行鞋','雨傘 / 折傘','防曬乳','個人盥洗用品','保濕面膜'] },
+      { id: 'medicine',    title: '藥品 & 健康',   items: ['常備藥（胃藥、感冒藥）','腸胃藥','OK繃','防蚊液','暈車藥（如需）'] },
+      { id: 'todo',        title: '出發前待辦',     items: ['網路購買 Suica 加值','確認航班時間','下載 Google Maps 離線地圖','下載翻譯 App','通知銀行海外刷卡','整理行李重量確認'] }
+    ];
+
+    let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (!state) {
+      state = {};
+      DEFAULT_SECTIONS.forEach(s => {
+        state[s.id] = { title: s.title, items: s.items.map(label => ({ label, checked: false })) };
+      });
+    }
+
+    let hasPending = false;
+    let snapshot = null;
+
+    function setPending(on) {
+      hasPending = on;
+      document.getElementById('confirm-bar').classList.toggle('show', on);
+    }
+
+    function takeSnapshot() {
+      snapshot = JSON.parse(JSON.stringify(state));
+    }
+
+    function markPending() {
+      if (!hasPending) takeSnapshot();
+      setPending(true);
+    }
+
+    function doConfirm() {
+      // 先把所有 contenteditable 的修改收回 state
+      document.querySelectorAll('.checklist-section.editing-mode').forEach(sec => {
+        const sectionId = sec.id.replace('sec-', '');
+        sec.querySelectorAll('.check-label[contenteditable]').forEach((el, i) => {
+          const txt = el.textContent.trim();
+          if (txt && state[sectionId].items[i]) state[sectionId].items[i].label = txt;
+        });
+        sec.classList.remove('editing-mode');
+        sec.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      snapshot = null;
+      setPending(false);
+      showToast();
+      render();
+    }
+
+    function doCancel() {
+      if (snapshot) { state = snapshot; snapshot = null; }
+      document.querySelectorAll('.checklist-section.editing-mode').forEach(sec => {
+        sec.classList.remove('editing-mode');
+      });
+      setPending(false);
+      render();
+    }
+
+    function showToast() {
+      const t = document.getElementById('save-toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 1800);
+    }
+
+    function toggleItem(sectionId, idx) {
+      markPending();
+      state[sectionId].items[idx].checked = !state[sectionId].items[idx].checked;
+      render();
+    }
+
+    function addItem(sectionId) {
+      const inp = document.getElementById(`add-inp-${sectionId}`);
+      const label = inp.value.trim();
+      if (!label) return;
+      markPending();
+      state[sectionId].items.push({ label, checked: false });
+      inp.value = '';
+      render();
+    }
+
+    function delItem(sectionId, idx) {
+      markPending();
+      state[sectionId].items.splice(idx, 1);
+      render();
+    }
+
+    function toggleSectionEdit(sectionId) {
+      const sec = document.getElementById(`sec-${sectionId}`);
+      const isEditing = sec.classList.contains('editing-mode');
+      if (isEditing) {
+        // 收集已編輯的標籤文字存回 state
+        sec.querySelectorAll('.check-label[contenteditable]').forEach((el, i) => {
+          const txt = el.textContent.trim();
+          if (txt) state[sectionId].items[i].label = txt;
+          el.removeAttribute('contenteditable');
+        });
+        sec.classList.remove('editing-mode');
+      } else {
+        markPending();
+        sec.classList.add('editing-mode');
+        sec.querySelectorAll('.check-label').forEach(el => {
+          el.contentEditable = 'true';
+        });
+      }
+    }
+
+    function render() {
+      const grid = document.getElementById('checklist-grid');
+      grid.innerHTML = '';
+      for (const [id, section] of Object.entries(state)) {
+        const total = section.items.length;
+        const done = section.items.filter(i => i.checked).length;
+        const div = document.createElement('div');
+        div.className = 'checklist-section';
+        div.id = `sec-${id}`;
+
+        const header = document.createElement('div');
+        header.className = 'section-header';
+        header.innerHTML = `
+          <div class="section-title">${section.title}</div>
+          <button class="section-edit-btn" onclick="toggleSectionEdit('${id}')" title="編輯項目">✏</button>
+        `;
+        div.appendChild(header);
+
+        const itemsContainer = document.createElement('div');
+        section.items.forEach((item, idx) => {
+          const row = document.createElement('div');
+          row.className = 'check-item' + (item.checked ? ' checked' : '');
+          row.innerHTML = `
+            <div class="check-box">${item.checked ? '✓' : ''}</div>
+            <div class="check-label">${item.label}</div>
+            <button class="check-item-del" onclick="event.stopPropagation();delItem('${id}',${idx})" title="刪除">×</button>
+          `;
+          row.addEventListener('click', () => {
+            if (document.getElementById(`sec-${id}`)?.classList.contains('editing-mode')) return;
+            toggleItem(id, idx);
+          });
+          itemsContainer.appendChild(row);
+        });
+        div.appendChild(itemsContainer);
+
+        const progress = document.createElement('div');
+        progress.className = 'check-progress';
+        progress.textContent = `${done} / ${total} 完成`;
+        div.appendChild(progress);
+
+        const addRow = document.createElement('div');
+        addRow.className = 'check-add-row';
+        addRow.innerHTML = `
+          <input class="check-add-input" id="add-inp-${id}" type="text" placeholder="新增項目…" />
+          <button class="check-add-btn" onclick="addItem('${id}')">＋</button>
+        `;
+        div.appendChild(addRow);
+
+        grid.appendChild(div);
+
+        div.querySelector(`#add-inp-${id}`).addEventListener('keydown', e => {
+          if (e.key === 'Enter') addItem(id);
+        });
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>

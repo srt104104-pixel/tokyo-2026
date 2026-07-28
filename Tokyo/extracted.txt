@@ -1,0 +1,123 @@
+﻿<h2>08 / 12（三）</h2>
+<div class="day-theme">✈️ 出發！台北 → 東京</div>
+<div class="section-divider">去程航班</div>
+<div class="section-divider">抵達後 ── 前往飯店</div>
+<div class="transit-fh-label">🏨 羽田機場 → 飯店</div>
+<div class="transit-detail">⏱ 約 45 分鐘｜¥650 左右｜也可搭京急空港線至上野站（約 42 分，¥620）</div>
+<div class="item-title">上野御徒町東誠可可尼飯店辦理入住</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/wqxZPZXEyqPPJadt7" target="_blank">📍 Google Maps</a>
+<h2>08 / 13（四）</h2>
+<div class="day-theme">🌿 表參道 ＋ 下北澤</div>
+<div class="transit-fh-label">🏨 飯店 → 表參道 ／ 原宿</div>
+<div class="transit-detail">⏱ 約 20 分鐘｜¥210｜表參道站 A2 出口步行即達</div>
+<div class="section-divider">表參道 ／ 原宿</div>
+<div class="item-title">明治神宮</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 約 5 分鐘｜¥180｜或沿表參道步行約 12 分</div>
+<div class="item-title">Found MUJI 青山</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 步行約 8 分｜沿表參道往原宿方向直走即達</div>
+<div class="item-title">Kiddy Land</div>
+<div class="item-sub">
+<div class="section-divider">下北澤</div>
+<div class="transit-detail">⏱ 約 15 分鐘｜¥210｜或從澀谷搭京王井之頭線直達（約 4 分）</div>
+<div class="item-title">unu glänta shimokitazawa</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 約 30 分鐘｜¥240｜或搭京王井之頭線至澀谷 → JR 山手線至御徒町（約 35 分）</div>
+<h2>08 / 14（五）</h2>
+<div class="day-theme">🏮 淺草 ＋ 水上巴士 ＋ 銀座</div>
+<div class="transit-fh-label">🏨 飯店 → 淺草</div>
+<div class="transit-detail">⏱ 約 10 分鐘｜¥180｜淺草站 1 號出口往雷門方向</div>
+<div class="section-divider">上午 ── 淺草</div>
+<div class="item-title">淺草寺 雷門</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/UGsN6FF2wCYmyaD28" target="_blank">📍 Google Maps</a>
+<div class="transit-detail">⏱ 步行約 8 分｜沿仲見世通往北走，過吾妻橋方向</div>
+<div class="item-title">壽清庵 茶室 淺草</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/xjyj6A37sFs5Z9Pv6" target="_blank">📍 Google Maps</a>
+<div class="transit-detail">⏱ 步行約 5 分｜往吾妻橋旁的淺草水上巴士乘船場</div>
+<div class="section-divider">水上巴士</div>
+<div class="item-title">隅田川水上巴士</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/dvMQZ4Y3uTm8zH1a6" target="_blank">📍 Google Maps</a><br/>
+<a class="map-btn" href="https://maps.app.goo.gl/kKMnqivDb2yrE7iH7" target="_blank">📍 Google Maps</a>
+<div class="section-divider">下午 ── 銀座</div>
+<div class="item-title">遠眺東京鐵塔</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 約 8 分鐘｜¥160｜日之出棧橋步行 7 分至濱松町站</div>
+<div class="item-title">東京車站</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/kgP1PehKZAso2Kph7" target="_blank">📍 Google Maps</a>
+<div class="transit-detail">⏱ 約 5 分鐘｜¥180｜或從有樂町站步行約 5 分亦可</div>
+<div class="item-title">無印良品 銀座旗艦店</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 約 12 分鐘｜¥180｜銀座站 A10 出口搭銀座線，最直接</div>
+<h2>08 / 15（六）</h2>
+<div class="day-theme">🌆 新宿 ＋ 谷中銀座 ＋ 阿美橫町</div>
+<div class="transit-fh-label">🏨 飯店 → 新宿</div>
+<div class="transit-detail">⏱ 約 25 分鐘｜¥200｜新宿站東口／南口皆可</div>
+<div class="section-divider">新宿</div>
+<div class="item-title">東京牛奶起司工坊</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 步行約 5 分｜同在新宿站東口一帶</div>
+<div class="item-title">AFURI 新宿</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/TW4KzWikhgwjqNRFA" target="_blank">📍 Google Maps</a>
+<div class="transit-detail">⏱ 約 25 分鐘｜¥200</div>
+<div class="section-divider">傍晚 ── 谷中銀座</div>
+<div class="item-title">谷中銀座商店街</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 約 5 分鐘｜¥160｜出站即是阿美橫町</div>
+<div class="section-divider">晚上 ── 阿美橫町</div>
+<div class="item-title">阿美橫町</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/RfUZWpWaAhb4JMo67" target="_blank">📍 Google Maps</a>
+<div class="transit-detail">⏱ 步行約 5 分｜阿美橫町就在御徒町站旁，步行即達</div>
+<h2>08 / 16（日）&nbsp;🎂 47生日快樂❤️</h2>
+<div class="day-theme">🐱 豪德寺招財貓 ＋ 新宿晚餐</div>
+<div class="transit-fh-label">🏨 飯店 → 豪德寺</div>
+<div class="transit-detail">⏱ 約 40 分鐘｜¥280 左右｜小田急線在新宿站需換乘，搭各停至豪徳寺站</div>
+<div class="section-divider">豪德寺</div>
+<div class="item-title">豪德寺</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 約 20 分鐘｜¥220</div>
+<div class="section-divider">晚餐 ── 新宿</div>
+<div class="item-title">六歌仙 新宿總店</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/r2LTvPfhLaatkpwm9" target="_blank">📍 Google Maps</a>
+<div class="transit-detail">⏱ 約 25 分鐘｜¥200｜御徒町站北口出站即達飯店</div>
+<h2>08 / 17（一）</h2>
+<div class="day-theme">🗻 富士山一日遊</div>
+<div class="transit-fh-label">🏨 飯店 → 河口湖（去程）</div>
+<div class="transit-detail">🚂 新宿 08:30 發車 → 河口湖 10:26 抵達｜1 小時 56 分｜CAR3：3A ／ 3B（指定席・普通車廂）</div>
+<div class="transit-fh-label">🏔 河口湖 → 飯店（回程）</div>
+<div class="transit-detail">🚂 河口湖 17:41 發車 → 新宿 19:48 抵達｜2 小時 7 分｜CAR3：5A ／ 5B（指定席・普通車廂）</div>
+<div class="section-divider">河口湖周邊</div>
+<div class="item-title">河口湖</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/fnDuq2pjBRoS6kbEA" target="_blank">📍 Google Maps</a>
+<div class="transit-detail">⏱ 約 10 分鐘｜¥260｜下吉田站步行 5 分至淺間神社、10 分至本町商店街</div>
+<div class="item-title">本町商店街</div>
+<div class="item-sub">
+<a class="map-btn" href="https://maps.app.goo.gl/M7TG6fzNQf5yfwE29" target="_blank">📍 Google Maps</a>
+<div class="item-title">淺間神社（富士山本宮淺間大社）</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 請於 17:10 前抵達河口湖站｜新宿 19:48 抵達 → 御徒町站步行約 5 分回飯店</div>
+<h2>08 / 18（二）</h2>
+<div class="day-theme">🎢 東京迪士尼海洋</div>
+<div class="transit-fh-label">🏨 飯店 → 東京迪士尼海洋</div>
+<div class="transit-detail">⏱ 約 40 分鐘｜¥330｜注意：京葉線月台在東京站地下較遠，需預留 10 分換乘時間</div>
+<div class="section-divider">園區</div>
+<div class="item-title">東京迪士尼海洋（Tokyo DisneySea）</div>
+<div class="item-sub">
+<div class="transit-detail">⏱ 約 45 分鐘｜¥330｜閉園後人潮眾多，建議提前 30 分出發避開人流</div>
+<h2>08 / 19（三）</h2>
+<div class="day-theme">✈️ 返程！東京 → 台北</div>
+<div class="transit-fh-label">🏨 飯店 → 羽田機場</div>
+<div class="transit-detail">⏱ 約 40 分鐘｜¥650｜或搭京急線：上野站 → 京急蒲田 → 羽田機場（約 42 分，¥620）</div>
+<div class="section-divider">出發前</div>
+<div class="item-title">退房 ＋ 前往機場</div>
+<div class="item-sub">
+<div class="section-divider">回程航班</div>
