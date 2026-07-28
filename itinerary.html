@@ -600,6 +600,14 @@
       });
       if (eventEl.querySelector('.event-actions')) return;
 
+      // 觸控：點行程本體切換按鈕顯示
+      eventEl.addEventListener('click', e => {
+        if (e.target.closest('.event-actions')) return;
+        const isTapped = eventEl.classList.contains('tapped');
+        document.querySelectorAll('.event.tapped').forEach(el => el.classList.remove('tapped'));
+        if (!isTapped) eventEl.classList.add('tapped');
+      });
+
       const actions = document.createElement('div');
       actions.className = 'event-actions';
 
@@ -765,6 +773,13 @@
       document.getElementById('confirm-bar').classList.remove('show');
     }
 
+    // 觸控：點空白處收起所有按鈕
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.event')) {
+        document.querySelectorAll('.event.tapped').forEach(el => el.classList.remove('tapped'));
+      }
+    });
+
     // ── 初始化 ──
     load();
 
@@ -869,9 +884,9 @@
       background: var(--accent-pale);
     }
 
-    /* 觸控裝置：按鈕一直顯示 */
+    /* 觸控裝置：點選後才顯示按鈕 */
     @media (hover: none) {
-      .event-actions { display: flex; }
+      .event.tapped .event-actions { display: flex; }
     }
   </style>
 </body>
