@@ -57,6 +57,8 @@
     .check-label { font-size: 0.8rem; letter-spacing: 0.04em; flex: 1; }
     .check-label[contenteditable='true'] { outline: 1px dashed var(--accent-light); border-radius: 1px; padding: 0 2px; }
     .check-label[contenteditable='true']:focus { outline: 1px solid var(--accent); background: var(--white); }
+    .section-title[contenteditable='true'] { outline: 1px dashed var(--accent-light); border-radius: 1px; padding: 0 4px; cursor: text; }
+    .section-title[contenteditable='true']:focus { outline: 1px solid var(--accent); background: var(--white); }
 
     .check-item-del {
       background: none; border: none; cursor: pointer;
@@ -84,11 +86,13 @@
     .checklist-section.editing-mode { background: var(--accent-pale); border-radius: 2px; padding: 0.5rem; }
 
     .tab-bar {
-      display: flex; gap: 0.4rem; flex-wrap: wrap;
-      margin-bottom: 1.5rem;
+      display: flex; gap: 0.4rem; flex-wrap: nowrap;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; margin-bottom: 1.5rem;
       border-bottom: 1px solid var(--border);
       padding-bottom: 0;
     }
+    .tab-bar::-webkit-scrollbar { display: none; }
     .tab-btn {
       background: none; border: none; cursor: pointer;
       font-size: 0.78rem; font-family: 'Noto Sans TC', sans-serif;
@@ -129,10 +133,11 @@
     </div>
 
     <div class="tab-bar" id="tab-bar">
-      <button class="tab-btn active" data-tab="47-prep">47 行前準備</button>
-      <button class="tab-btn" data-tab="cow-prep">牛 行前準備</button>
-      <button class="tab-btn" data-tab="47-gift">47 伴手禮</button>
-      <button class="tab-btn" data-tab="cow-gift">牛 伴手禮</button>
+      <button class="tab-btn active" data-tab="47-prep" onclick="switchTab('47-prep')">47 行前準備</button>
+      <button class="tab-btn" data-tab="cow-prep" onclick="switchTab('cow-prep')">牛 行前準備</button>
+      <button class="tab-btn" data-tab="47-gift" onclick="switchTab('47-gift')">47 必買清單</button>
+      <button class="tab-btn" data-tab="cow-buy" onclick="switchTab('cow-buy')">牛 必買清單</button>
+      <button class="tab-btn" data-tab="cow-gift" onclick="switchTab('cow-gift')">牛 伴手禮</button>
     </div>
 
     <div class="checklist-grid" id="checklist-grid"></div>
@@ -168,7 +173,8 @@
     const TABS = [
       { id: '47-prep',  label: '47 行前準備' },
       { id: 'cow-prep', label: '牛 行前準備' },
-      { id: '47-gift',  label: '47 伴手禮' },
+      { id: '47-gift',  label: '47 必買清單' },
+      { id: 'cow-buy',  label: '牛 必買清單' },
       { id: 'cow-gift', label: '牛 伴手禮' },
     ];
 
@@ -189,8 +195,8 @@
         });
         return s;
       }
-      // 伴手禮分頁預設空白
-      return { items: { title: '清單', items: [] } };
+      // 伴手禮分頁預設空白，沒有預設區塊
+      return {};
     }
 
     // allState[tabId] = { sectionId: { title, items: [{label, checked}] } }
@@ -206,7 +212,7 @@
         // 移除舊的 common 分頁（若存在）
         delete allState['common'];
       }
-      TABS.forEach(t => { if (!allState[t.id]) allState[t.id] = buildDefaultSections(t.id); });
+      TABS.forEach(t => { if (allState[t.id] === null || allState[t.id] === undefined || typeof allState[t.id] !== 'object') allState[t.id] = buildDefaultSections(t.id); });
       render();
     }).catch(() => {
       TABS.forEach(t => { allState[t.id] = buildDefaultSections(t.id); });
@@ -232,6 +238,13 @@
     function doConfirm() {
       document.querySelectorAll('.checklist-section.editing-mode').forEach(sec => {
         const sectionId = sec.id.replace('sec-', '');
+        // 收回標題
+        const titleEl = sec.querySelector('.section-title[contenteditable]');
+        if (titleEl) {
+          const t = titleEl.textContent.trim();
+          if (t) allState[currentTab][sectionId].title = t;
+        }
+        // 收回項目
         sec.querySelectorAll('.check-label[contenteditable]').forEach((el, i) => {
           const txt = el.textContent.trim();
           if (txt && allState[currentTab][sectionId].items[i]) allState[currentTab][sectionId].items[i].label = txt;
@@ -288,6 +301,14 @@
       const sec = document.getElementById(`sec-${sectionId}`);
       const isEditing = sec.classList.contains('editing-mode');
       if (isEditing) {
+        // 收回標題
+        const titleEl = sec.querySelector('.section-title[contenteditable]');
+        if (titleEl) {
+          const t = titleEl.textContent.trim();
+          if (t) curState()[sectionId].title = t;
+          titleEl.removeAttribute('contenteditable');
+        }
+        // 收回項目
         sec.querySelectorAll('.check-label[contenteditable]').forEach((el, i) => {
           const txt = el.textContent.trim();
           if (txt) curState()[sectionId].items[i].label = txt;
@@ -297,6 +318,10 @@
       } else {
         markPending();
         sec.classList.add('editing-mode');
+        // 標題可編輯
+        const titleEl = sec.querySelector('.section-title');
+        if (titleEl) titleEl.contentEditable = 'true';
+        // 項目可編輯
         sec.querySelectorAll('.check-label').forEach(el => {
           el.contentEditable = 'true';
         });
@@ -324,10 +349,12 @@
     function render() {
       const grid = document.getElementById('checklist-grid');
       grid.innerHTML = '';
-      const tabState = curState();
+      const tabState = curState() || {};
       for (const [id, section] of Object.entries(tabState)) {
-        const total = section.items.length;
-        const done = section.items.filter(i => i.checked).length;
+        if (!section || typeof section !== 'object') continue;
+        const items = Array.isArray(section.items) ? section.items : [];
+        const total = items.length;
+        const done = items.filter(i => i.checked).length;
         const div = document.createElement('div');
         div.className = 'checklist-section';
         div.id = `sec-${id}`;
@@ -341,7 +368,7 @@
         div.appendChild(header);
 
         const itemsContainer = document.createElement('div');
-        section.items.forEach((item, idx) => {
+        items.forEach((item, idx) => {
           const row = document.createElement('div');
           row.className = 'check-item' + (item.checked ? ' checked' : '');
           row.innerHTML = `
@@ -397,6 +424,8 @@
     window.addItem = addItem;
     window.delItem = delItem;
     window.toggleSectionEdit = toggleSectionEdit;
+    window.switchTab = switchTab;
+    window.addSection = addSection;
   </script>
 </body>
 </html>
