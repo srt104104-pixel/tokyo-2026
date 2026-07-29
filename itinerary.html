@@ -759,8 +759,8 @@
         <div class="event-body">
           <div class="event-title">${title}</div>
           ${route  ? `<div class="transit-note">${route}</div>` : ''}
-          ${mapUrl ? `<a class="event-map-link" href="${mapUrl}" target="_blank" rel="noopener">地圖 ↗</a>` : ''}
           ${note   ? `<div class="event-sub">${note}</div>` : ''}
+          ${mapUrl ? `<a class="event-map-link" href="${mapUrl}" target="_blank" rel="noopener">地圖 ↗</a>` : ''}
         </div>
       `;
       container.appendChild(el);
