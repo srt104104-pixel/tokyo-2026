@@ -746,8 +746,9 @@
       if (time === null) return;
       const title = prompt('行程名稱', '');
       if (!title) return;
-      const note  = prompt('備註（可留空）', '') || '';
-      const route = prompt('路線／交通方式（可留空）', '') || '';
+      const route  = prompt('路線／交通方式（可留空）', '') || '';
+      const mapUrl = prompt('地圖網址（可留空）', '') || '';
+      const note   = prompt('備註（可留空）', '') || '';
 
       const container = document.getElementById(dayId);
       snapshotIfClean();
@@ -757,8 +758,9 @@
         <div class="event-time">${time}</div>
         <div class="event-body">
           <div class="event-title">${title}</div>
-          ${note  ? `<div class="event-sub">${note}</div>` : ''}
-          ${route ? `<div class="transit-note">${route}</div>` : ''}
+          ${route  ? `<div class="transit-note">${route}</div>` : ''}
+          ${mapUrl ? `<a class="event-map-link" href="${mapUrl}" target="_blank" rel="noopener">地圖 ↗</a>` : ''}
+          ${note   ? `<div class="event-sub">${note}</div>` : ''}
         </div>
       `;
       container.appendChild(el);
