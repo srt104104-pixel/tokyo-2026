@@ -82,6 +82,33 @@
 
     .checklist-section { position: relative; }
     .checklist-section.editing-mode { background: var(--accent-pale); border-radius: 2px; padding: 0.5rem; }
+
+    .tab-bar {
+      display: flex; gap: 0.4rem; flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .tab-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.78rem; font-family: 'Noto Sans TC', sans-serif;
+      letter-spacing: 0.08em; color: var(--ink-faint);
+      padding: 0.45rem 1rem 0.55rem;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-btn:hover { color: var(--ink); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    .add-section-btn {
+      display: block; width: 100%; margin-top: 1rem;
+      background: none; border: 1px dashed var(--border); border-radius: 1px;
+      cursor: pointer; padding: 0.5rem;
+      font-size: 0.75rem; letter-spacing: 0.1em; color: var(--ink-faint);
+      font-family: 'Noto Sans TC', sans-serif; transition: color 0.15s, border-color 0.15s;
+    }
+    .add-section-btn:hover { color: var(--accent); border-color: var(--accent-light); }
   </style>
 </head>
 <body>
@@ -98,7 +125,14 @@
   <main class="page">
     <div class="page-header">
       <div class="page-en">Checklist</div>
-      <div class="page-zh">行前準備清單</div>
+      <div class="page-zh">清單</div>
+    </div>
+
+    <div class="tab-bar" id="tab-bar">
+      <button class="tab-btn active" data-tab="47-prep">47 行前準備</button>
+      <button class="tab-btn" data-tab="cow-prep">牛 行前準備</button>
+      <button class="tab-btn" data-tab="47-gift">47 伴手禮</button>
+      <button class="tab-btn" data-tab="cow-gift">牛 伴手禮</button>
     </div>
 
     <div class="checklist-grid" id="checklist-grid"></div>
@@ -128,10 +162,17 @@
     };
     const fbApp = initializeApp(firebaseConfig, 'checklist');
     const db = getDatabase(fbApp);
-    const FB_KEY = 'checklist';
-    const STORAGE_KEY = 'tokyo-checklist';
+    const LS_KEY = 'tokyo-checklist-v2';
 
-    const DEFAULT_SECTIONS = [
+    // 分頁定義
+    const TABS = [
+      { id: '47-prep',  label: '47 行前準備' },
+      { id: 'cow-prep', label: '牛 行前準備' },
+      { id: '47-gift',  label: '47 伴手禮' },
+      { id: 'cow-gift', label: '牛 伴手禮' },
+    ];
+
+    const DEFAULT_COMMON = [
       { id: 'docs',        title: '證件 & 文件',   items: ['護照（有效期 6 個月以上）','機票電子票證','飯店訂房確認信','旅遊保險','國際駕照（若需）','緊急聯絡卡'] },
       { id: 'money',       title: '金錢 & 支付',   items: ['日圓現金','信用卡（VISA / Mastercard）','Suica / PASMO 卡','備用信用卡','零錢包'] },
       { id: 'electronics', title: '3C & 電子',     items: ['手機 + 充電線','行動電源','相機 + 記憶卡','日本插頭轉接頭','耳機','Wi-Fi 分享器 / SIM 卡'] },
@@ -140,26 +181,39 @@
       { id: 'todo',        title: '出發前待辦',     items: ['網路購買 Suica 加值','確認航班時間','下載 Google Maps 離線地圖','下載翻譯 App','通知銀行海外刷卡','整理行李重量確認'] }
     ];
 
-    function buildDefaultState() {
-      const s = {};
-      DEFAULT_SECTIONS.forEach(sec => {
-        s[sec.id] = { title: sec.title, items: sec.items.map(label => ({ label, checked: false })) };
-      });
-      return s;
+    function buildDefaultSections(tabId) {
+      if (tabId === '47-prep' || tabId === 'cow-prep') {
+        const s = {};
+        DEFAULT_COMMON.forEach(sec => {
+          s[sec.id] = { title: sec.title, items: sec.items.map(label => ({ label, checked: false })) };
+        });
+        return s;
+      }
+      // 伴手禮分頁預設空白
+      return { items: { title: '清單', items: [] } };
     }
 
-    let state = null;
+    // allState[tabId] = { sectionId: { title, items: [{label, checked}] } }
+    let allState = {};
+    let currentTab = '47-prep';
     let hasPending = false;
     let snapshot = null;
 
-    // 載入：優先 Firebase，fallback localStorage
-    get(ref(db, FB_KEY)).then(snap => {
-      state = snap.exists() ? snap.val() : (JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || buildDefaultState());
+    // 載入所有分頁資料
+    get(ref(db, 'checklist-all')).then(snap => {
+      if (snap.exists()) {
+        allState = snap.val();
+        // 移除舊的 common 分頁（若存在）
+        delete allState['common'];
+      }
+      TABS.forEach(t => { if (!allState[t.id]) allState[t.id] = buildDefaultSections(t.id); });
       render();
     }).catch(() => {
-      state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || buildDefaultState();
+      TABS.forEach(t => { allState[t.id] = buildDefaultSections(t.id); });
       render();
     });
+
+    function curState() { return allState[currentTab]; }
 
     function setPending(on) {
       hasPending = on;
@@ -167,7 +221,7 @@
     }
 
     function takeSnapshot() {
-      snapshot = JSON.parse(JSON.stringify(state));
+      snapshot = JSON.parse(JSON.stringify(allState[currentTab]));
     }
 
     function markPending() {
@@ -176,18 +230,17 @@
     }
 
     function doConfirm() {
-      // 先把所有 contenteditable 的修改收回 state
       document.querySelectorAll('.checklist-section.editing-mode').forEach(sec => {
         const sectionId = sec.id.replace('sec-', '');
         sec.querySelectorAll('.check-label[contenteditable]').forEach((el, i) => {
           const txt = el.textContent.trim();
-          if (txt && state[sectionId].items[i]) state[sectionId].items[i].label = txt;
+          if (txt && allState[currentTab][sectionId].items[i]) allState[currentTab][sectionId].items[i].label = txt;
         });
         sec.classList.remove('editing-mode');
         sec.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
       });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      set(ref(db, FB_KEY), state);
+      localStorage.setItem(LS_KEY, JSON.stringify(allState));
+      set(ref(db, 'checklist-all'), allState);
       snapshot = null;
       setPending(false);
       showToast();
@@ -195,7 +248,7 @@
     }
 
     function doCancel() {
-      if (snapshot) { state = snapshot; snapshot = null; }
+      if (snapshot) { allState[currentTab] = snapshot; snapshot = null; }
       document.querySelectorAll('.checklist-section.editing-mode').forEach(sec => {
         sec.classList.remove('editing-mode');
       });
@@ -211,7 +264,7 @@
 
     function toggleItem(sectionId, idx) {
       markPending();
-      state[sectionId].items[idx].checked = !state[sectionId].items[idx].checked;
+      curState()[sectionId].items[idx].checked = !curState()[sectionId].items[idx].checked;
       render();
     }
 
@@ -220,14 +273,14 @@
       const label = inp.value.trim();
       if (!label) return;
       markPending();
-      state[sectionId].items.push({ label, checked: false });
+      curState()[sectionId].items.push({ label, checked: false });
       inp.value = '';
       render();
     }
 
     function delItem(sectionId, idx) {
       markPending();
-      state[sectionId].items.splice(idx, 1);
+      curState()[sectionId].items.splice(idx, 1);
       render();
     }
 
@@ -235,10 +288,9 @@
       const sec = document.getElementById(`sec-${sectionId}`);
       const isEditing = sec.classList.contains('editing-mode');
       if (isEditing) {
-        // 收集已編輯的標籤文字存回 state
         sec.querySelectorAll('.check-label[contenteditable]').forEach((el, i) => {
           const txt = el.textContent.trim();
-          if (txt) state[sectionId].items[i].label = txt;
+          if (txt) curState()[sectionId].items[i].label = txt;
           el.removeAttribute('contenteditable');
         });
         sec.classList.remove('editing-mode');
@@ -251,10 +303,29 @@
       }
     }
 
+    function switchTab(tabId) {
+      if (hasPending) return; // 有未儲存變更時不切換
+      currentTab = tabId;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+      });
+      render();
+    }
+
+    function addSection() {
+      const title = prompt('新區塊名稱', '');
+      if (!title) return;
+      const id = 'sec-' + Date.now();
+      markPending();
+      curState()[id] = { title, items: [] };
+      render();
+    }
+
     function render() {
       const grid = document.getElementById('checklist-grid');
       grid.innerHTML = '';
-      for (const [id, section] of Object.entries(state)) {
+      const tabState = curState();
+      for (const [id, section] of Object.entries(tabState)) {
         const total = section.items.length;
         const done = section.items.filter(i => i.checked).length;
         const div = document.createElement('div');
@@ -305,7 +376,20 @@
           if (e.key === 'Enter') addItem(id);
         });
       }
+
+      // 新增區塊按鈕
+      const addSecBtn = document.createElement('button');
+      addSecBtn.className = 'add-section-btn';
+      addSecBtn.textContent = '＋ 新增區塊';
+      addSecBtn.onclick = addSection;
+      grid.appendChild(addSecBtn);
     }
+
+    // 分頁點擊
+    document.getElementById('tab-bar').addEventListener('click', e => {
+      const btn = e.target.closest('.tab-btn');
+      if (btn) switchTab(btn.dataset.tab);
+    });
 
     window.doConfirm = doConfirm;
     window.doCancel = doCancel;
