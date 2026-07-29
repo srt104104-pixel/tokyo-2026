@@ -172,6 +172,32 @@
           <div class="event-tag event-tag--spot">購物</div>
         </div>
         <div class="event">
+          <div class="event-time">傍晚</div>
+          <div class="event-body">
+            <div class="event-title">前往澀谷</div>
+            <div class="transit-note">京王井之頭線 ➡ 下北澤站 ➡ 澀谷站 ➡ 步行 5 分鐘</div>
+          </div>
+          <div class="event-tag event-tag--flight">交通</div>
+        </div>
+        <div class="event">
+          <div class="event-time">傍晚</div>
+          <div class="event-body">
+            <div class="event-title">LOFT 澀谷</div>
+            <div class="event-sub">Shibuya, Tokyo　11:00–21:00</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/DawtjWw7gqmsa3pp9" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">購物</div>
+        </div>
+        <div class="event">
+          <div class="event-time">傍晚</div>
+          <div class="event-body">
+            <div class="event-title">Disney Store 澀谷</div>
+            <div class="event-sub">Shibuya, Tokyo　10:00–21:00</div>
+            <a class="event-map-link" href="https://maps.app.goo.gl/iBcrTYSrm6yz5FX79" target="_blank" rel="noopener">地圖 ↗</a>
+          </div>
+          <div class="event-tag event-tag--spot">購物</div>
+        </div>
+        <div class="event">
           <div class="event-time">夜</div>
           <div class="event-body">
             <div class="event-title">🛏 返回飯店</div>
@@ -720,7 +746,8 @@
       if (time === null) return;
       const title = prompt('行程名稱', '');
       if (!title) return;
-      const note = prompt('備註（可留空）', '') || '';
+      const note  = prompt('備註（可留空）', '') || '';
+      const route = prompt('路線／交通方式（可留空）', '') || '';
 
       const container = document.getElementById(dayId);
       snapshotIfClean();
@@ -730,7 +757,8 @@
         <div class="event-time">${time}</div>
         <div class="event-body">
           <div class="event-title">${title}</div>
-          <div class="event-sub">${note}</div>
+          ${note  ? `<div class="event-sub">${note}</div>` : ''}
+          ${route ? `<div class="transit-note">${route}</div>` : ''}
         </div>
       `;
       container.appendChild(el);
