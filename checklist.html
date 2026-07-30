@@ -146,6 +146,7 @@
       <button class="tab-btn" data-tab="47-gift" onclick="switchTab('47-gift')">47 必買清單</button>
       <button class="tab-btn" data-tab="cow-buy" onclick="switchTab('cow-buy')">牛 必買清單</button>
       <button class="tab-btn" data-tab="cow-gift" onclick="switchTab('cow-gift')">牛 伴手禮</button>
+      <button class="tab-btn" data-tab="cow-proxy" onclick="switchTab('cow-proxy')">牛 代購</button>
     </div>
 
     <div class="checklist-grid" id="checklist-grid"></div>
@@ -179,11 +180,12 @@
 
     // 分頁定義
     const TABS = [
-      { id: '47-prep',  label: '47 行前準備' },
-      { id: 'cow-prep', label: '牛 行前準備' },
-      { id: '47-gift',  label: '47 必買清單' },
-      { id: 'cow-buy',  label: '牛 必買清單' },
-      { id: 'cow-gift', label: '牛 伴手禮' },
+      { id: '47-prep',   label: '47 行前準備' },
+      { id: 'cow-prep',  label: '牛 行前準備' },
+      { id: '47-gift',   label: '47 必買清單' },
+      { id: 'cow-buy',   label: '牛 必買清單' },
+      { id: 'cow-gift',  label: '牛 伴手禮' },
+      { id: 'cow-proxy', label: '牛 代購' },
     ];
 
     const DEFAULT_COMMON = [
@@ -294,8 +296,17 @@
       const label = inp.value.trim();
       if (!label) return;
       markPending();
-      curState()[sectionId].items.push({ label, checked: false });
+      const sec = curState()[sectionId];
+      if (!Array.isArray(sec.items)) sec.items = [];
+      sec.items.push({ label, checked: false });
       inp.value = '';
+      render();
+    }
+
+    function delSection(sectionId) {
+      if (!confirm('確定刪除這個區塊？')) return;
+      markPending();
+      delete curState()[sectionId];
       render();
     }
 
@@ -371,7 +382,10 @@
         header.className = 'section-header';
         header.innerHTML = `
           <div class="section-title">${section.title}</div>
-          <button class="section-edit-btn" onclick="toggleSectionEdit('${id}')" title="編輯項目">✏</button>
+          <div style="display:flex;gap:0.3rem">
+            <button class="section-edit-btn" onclick="toggleSectionEdit('${id}')" title="編輯項目">✏</button>
+            <button class="section-edit-btn" onclick="delSection('${id}')" title="刪除區塊" style="color:var(--ink-faint)">🗑</button>
+          </div>
         `;
         div.appendChild(header);
 
@@ -431,6 +445,7 @@
     window.toggleItem = toggleItem;
     window.addItem = addItem;
     window.delItem = delItem;
+    window.delSection = delSection;
     window.toggleSectionEdit = toggleSectionEdit;
     window.switchTab = switchTab;
     window.addSection = addSection;
