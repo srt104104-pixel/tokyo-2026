@@ -28,6 +28,20 @@
       font-size: 0.68rem; color: var(--ink-faint); letter-spacing: 0.05em;
       margin-top: 0.15rem;
     }
+    .expense-item { cursor: pointer; }
+    .expense-actions {
+      display: none; gap: 0.2rem; align-items: center; margin-left: 0.3rem;
+    }
+    .expense-item.tapped .expense-actions { display: flex; }
+    .expense-action-btn {
+      background: none; border: 1px solid var(--border); border-radius: 1px;
+      cursor: pointer; padding: 0.15rem 0.4rem;
+      font-size: 0.75rem; color: var(--ink-faint);
+      transition: color 0.15s, border-color 0.15s;
+      line-height: 1.4;
+    }
+    .expense-action-btn:hover { color: var(--accent); border-color: var(--accent-light); }
+    .expense-action-del:hover { color: var(--red); border-color: var(--red); }
   </style>
 </head>
 <body>
@@ -265,14 +279,17 @@
         html += `<div class="expense-group-label">${label} &nbsp;—&nbsp; NT$${fmt(dayTwd)}</div>`;
         for (const e of byDay[day]) {
           html += `
-            <div class="expense-item">
+            <div class="expense-item" onclick="toggleExpenseActions(this)">
               <div class="expense-dot"></div>
               <div class="expense-desc">${e.desc}</div>
               <div class="expense-cat">${e.cat}</div>
               ${e.shared === 'personal' ? `<div class="expense-cat" style="color:var(--ink-faint);font-size:0.65rem;">個人</div>` : ''}
               ${e.person ? `<div class="expense-cat" style="color:var(--ink-faint);">${e.person}</div>` : ''}
               <div class="expense-amount">${amountLabel(e)}</div>
-              <button class="expense-del" onclick="delExpense(${e.idx})" title="刪除">×</button>
+              <div class="expense-actions">
+                <button class="expense-action-btn" onclick="event.stopPropagation();editExpense(${e.idx})" title="編輯">✏</button>
+                <button class="expense-action-btn expense-action-del" onclick="event.stopPropagation();delExpense(${e.idx})" title="刪除">×</button>
+              </div>
             </div>`;
         }
       }
@@ -392,6 +409,25 @@
       document.getElementById('breakdown-bars').innerHTML = bars;
     }
 
+    function toggleExpenseActions(el) {
+      const isTapped = el.classList.contains('tapped');
+      document.querySelectorAll('.expense-item.tapped').forEach(e => e.classList.remove('tapped'));
+      if (!isTapped) el.classList.add('tapped');
+    }
+
+    function editExpense(idx) {
+      const e = expenses[idx];
+      const desc = prompt('項目', e.desc);
+      if (desc === null) return;
+      const amount = prompt('金額', e.amount);
+      if (amount === null) return;
+      const parsed = parseInt(String(amount).replace(/,/g, ''), 10);
+      if (!parsed || parsed <= 0) { alert('金額無效'); return; }
+      expenses[idx] = { ...e, desc: desc.trim() || e.desc, amount: parsed };
+      save();
+      render();
+    }
+
     function addExpense() {
       const desc = document.getElementById('inp-desc').value.trim();
       const amount = parseInt(document.getElementById('inp-amount').value.replace(/,/g, ''), 10);
@@ -420,9 +456,17 @@
 
     window.addExpense = addExpense;
     window.delExpense = delExpense;
+    window.editExpense = editExpense;
+    window.toggleExpenseActions = toggleExpenseActions;
     window.renderBreakdown = renderBreakdown;
 
     document.getElementById('rate').addEventListener('input', render);
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.expense-item')) {
+        document.querySelectorAll('.expense-item.tapped').forEach(el => el.classList.remove('tapped'));
+      }
+    });
 
     document.getElementById('cat-filter').addEventListener('click', e => {
       const btn = e.target.closest('.cat-filter-btn');
