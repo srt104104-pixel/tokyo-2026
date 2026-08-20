@@ -15,6 +15,19 @@
       }
       .form-group { min-width: 0; }
     }
+    .cat-filter-btn {
+      background: none; border: 1px solid var(--border); border-radius: 1px;
+      cursor: pointer; padding: 0.2rem 0.65rem;
+      font-size: 0.7rem; letter-spacing: 0.08em;
+      font-family: 'Noto Sans TC', sans-serif;
+      color: var(--ink-faint); transition: all 0.15s;
+    }
+    .cat-filter-btn:hover { color: var(--accent); border-color: var(--accent-light); }
+    .cat-filter-btn.active { background: var(--accent); color: var(--white); border-color: var(--accent); }
+    .person-row-detail {
+      font-size: 0.68rem; color: var(--ink-faint); letter-spacing: 0.05em;
+      margin-top: 0.15rem;
+    }
   </style>
 </head>
 <body>
@@ -98,6 +111,7 @@
         <div class="form-group">
           <label class="form-label">日期</label>
           <select class="form-select" id="inp-day">
+            <option value=""></option>
             <option value="">—</option>
             <option value="8/12">8/12 週三</option>
             <option value="8/13">8/13 週四</option>
@@ -113,7 +127,7 @@
       <div style="margin-top:0.75rem;display:flex;gap:0.75rem;align-items:center;">
         <button class="form-btn" onclick="addExpense()">記帳</button>
         <span style="font-size:0.68rem;color:var(--ink-faint);letter-spacing:0.08em;">
-          匯率參考：1 JPY ≈ <input id="rate" type="number" value="0.215" step="0.001" style="width:60px;background:var(--cream);border:1px solid var(--border);border-radius:1px;padding:0.1rem 0.3rem;font-size:0.78rem;font-family:'Noto Sans TC',sans-serif;color:var(--ink);" /> TWD
+          匯率參考：1 JPY ≈ <input id="rate" type="number" value="0.205" step="0.001" style="width:60px;background:var(--cream);border:1px solid var(--border);border-radius:1px;padding:0.1rem 0.3rem;font-size:0.78rem;font-family:'Noto Sans TC',sans-serif;color:var(--ink);" /> TWD
         </span>
       </div>
     </div>
@@ -125,17 +139,38 @@
       </div>
     </div>
 
-    <!-- Category breakdown -->
-    <div id="breakdown" style="display:none;margin-top:1.5rem;">
-      <div class="expense-group-label">類別分析</div>
-      <div id="breakdown-bars"></div>
-    </div>
-
     <!-- Person breakdown -->
     <div id="person-breakdown" style="display:none;margin-top:1.5rem;">
       <div class="expense-group-label">付款人統計</div>
       <div id="person-bars"></div>
       <div id="settle" style="margin-top:1rem;padding:0.75rem 1rem;background:var(--paper);border-left:2px solid var(--accent-light);font-size:0.8rem;letter-spacing:0.06em;color:var(--ink);"></div>
+    </div>
+
+    <!-- Category breakdown -->
+    <div id="breakdown" style="display:none;margin-top:1.5rem;">
+      <div style="display:flex;flex-direction:column;gap:0.45rem;margin-bottom:0.75rem;">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+          <div class="expense-group-label" style="margin-bottom:0;">類別分析</div>
+          <div id="cat-filter" style="display:flex;gap:0.3rem;">
+            <button class="cat-filter-btn active" data-filter="all">全部</button>
+            <button class="cat-filter-btn" data-filter="牛">牛</button>
+            <button class="cat-filter-btn" data-filter="47">47</button>
+          </div>
+        </div>
+        <div id="day-filter" style="display:flex;gap:0.3rem;flex-wrap:wrap;">
+          <button class="cat-filter-btn active" data-day="all">所有日期</button>
+          <button class="cat-filter-btn" data-day="">—</button>
+          <button class="cat-filter-btn" data-day="8/12">8/12</button>
+          <button class="cat-filter-btn" data-day="8/13">8/13</button>
+          <button class="cat-filter-btn" data-day="8/14">8/14</button>
+          <button class="cat-filter-btn" data-day="8/15">8/15</button>
+          <button class="cat-filter-btn" data-day="8/16">8/16</button>
+          <button class="cat-filter-btn" data-day="8/17">8/17</button>
+          <button class="cat-filter-btn" data-day="8/18">8/18</button>
+          <button class="cat-filter-btn" data-day="8/19">8/19</button>
+        </div>
+      </div>
+      <div id="breakdown-bars"></div>
     </div>
   </main>
 
@@ -244,23 +279,7 @@
       list.innerHTML = html;
 
       // Breakdown（以台幣換算）
-      const byCat = {};
-      expenses.forEach(e => { byCat[e.cat] = (byCat[e.cat] || 0) + toTwd(e); });
-      const maxVal = Math.max(...Object.values(byCat));
-      let bars = '';
-      for (const [cat, val] of Object.entries(byCat).sort((a,b) => b[1]-a[1])) {
-        const pct = Math.round(val / totalTwd * 100);
-        const w = Math.round(val / maxVal * 100);
-        bars += `
-          <div style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0;border-bottom:1px dashed var(--border);">
-            <div style="min-width:40px;font-size:0.72rem;color:var(--ink-faint);">${cat}</div>
-            <div style="flex:1;height:4px;background:var(--paper);border-radius:2px;">
-              <div style="height:100%;width:${w}%;background:var(--accent-light);border-radius:2px;"></div>
-            </div>
-            <div style="font-size:0.78rem;color:var(--ink);font-family:'Cormorant Garamond',serif;min-width:80px;text-align:right;">NT$${fmt(val)} <span style="color:var(--ink-faint);font-size:0.65rem;">${pct}%</span></div>
-          </div>`;
-      }
-      document.getElementById('breakdown-bars').innerHTML = bars;
+      renderBreakdown(expenses, totalTwd);
       document.getElementById('breakdown').style.display = 'block';
 
       // ── 付款人統計 ──
@@ -283,20 +302,36 @@
         return;
       }
 
-      const personMax = Math.max(...PERSONS.map(p => byPerson[p]));
+      // 共同總額
+      const sharedTotal = PERSONS.reduce((s, p) => s + byPersonShared[p], 0);
+      const sharedHalf = Math.round(sharedTotal / 2);
+
+      // 各人實際應付 = 個人支出 + 共同總額 / 2
+      const byPersonOwed = {};
+      PERSONS.forEach(p => {
+        const personalVal = byPerson[p] - byPersonShared[p];
+        byPersonOwed[p] = personalVal + sharedHalf;
+      });
+
+      const owedMax = Math.max(...PERSONS.map(p => byPersonOwed[p]));
       let pbars = '';
       PERSONS.forEach(p => {
-        const val = byPerson[p];
-        const sharedVal = byPersonShared[p];
-        const personalVal = val - sharedVal;
-        const w = personMax > 0 ? Math.round(val / personMax * 100) : 0;
+        const paid = byPerson[p];
+        const personalVal = paid - byPersonShared[p];
+        const owed = byPersonOwed[p];
+        const w = owedMax > 0 ? Math.round(owed / owedMax * 100) : 0;
         pbars += `
-          <div style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0;border-bottom:1px dashed var(--border);">
-            <div style="min-width:28px;font-size:0.78rem;color:var(--ink);font-weight:600;">${p}</div>
-            <div style="flex:1;height:4px;background:var(--paper);border-radius:2px;">
-              <div style="height:100%;width:${w}%;background:var(--accent);border-radius:2px;"></div>
+          <div style="padding:0.5rem 0;border-bottom:1px dashed var(--border);">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+              <div style="min-width:28px;font-size:0.78rem;color:var(--ink);font-weight:600;">${p}</div>
+              <div style="flex:1;height:4px;background:var(--paper);border-radius:2px;">
+                <div style="height:100%;width:${w}%;background:var(--accent);border-radius:2px;"></div>
+              </div>
+              <div style="font-size:0.78rem;color:var(--ink);font-family:'Cormorant Garamond',serif;min-width:100px;text-align:right;">NT$${fmt(owed)}</div>
             </div>
-            <div style="font-size:0.78rem;color:var(--ink);font-family:'Cormorant Garamond',serif;min-width:100px;text-align:right;">NT$${fmt(val)}</div>
+            <div class="person-row-detail" style="padding-left:40px;">
+              個人 NT$${fmt(personalVal)}　＋　共同分擔 NT$${fmt(sharedHalf)}　（已付 NT$${fmt(paid)}）
+            </div>
           </div>`;
       });
       document.getElementById('person-bars').innerHTML = pbars;
@@ -317,6 +352,44 @@
       }
       document.getElementById('settle').innerHTML = settleText;
       document.getElementById('person-breakdown').style.display = 'block';
+    }
+
+    let catFilterPerson = 'all';
+    let catFilterDay = 'all';
+
+    function renderBreakdown(allExpenses, totalTwd) {
+      let filtered = catFilterPerson === 'all' ? allExpenses : allExpenses.filter(e => e.person === catFilterPerson);
+      if (catFilterDay !== 'all') filtered = filtered.filter(e => (e.day || '') === catFilterDay);
+
+      // 計算各類別金額：篩選特定人時，共同支出算一半
+      const byCat = {};
+      filtered.forEach(e => {
+        const val = (catFilterPerson !== 'all' && (!e.shared || e.shared === 'shared'))
+          ? Math.round(toTwd(e) / 2)
+          : toTwd(e);
+        byCat[e.cat] = (byCat[e.cat] || 0) + val;
+      });
+      const filteredTwd = Object.values(byCat).reduce((s, v) => s + v, 0);
+      if (Object.keys(byCat).length === 0) {
+        document.getElementById('breakdown-bars').innerHTML =
+          '<div style="font-size:0.75rem;color:var(--ink-faint);padding:0.5rem 0;letter-spacing:0.08em;">— 無記錄 —</div>';
+        return;
+      }
+      const maxVal = Math.max(...Object.values(byCat));
+      let bars = '';
+      for (const [cat, val] of Object.entries(byCat).sort((a,b) => b[1]-a[1])) {
+        const pct = filteredTwd > 0 ? Math.round(val / filteredTwd * 100) : 0;
+        const w = Math.round(val / maxVal * 100);
+        bars += `
+          <div style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0;border-bottom:1px dashed var(--border);">
+            <div style="min-width:40px;font-size:0.72rem;color:var(--ink-faint);">${cat}</div>
+            <div style="flex:1;height:4px;background:var(--paper);border-radius:2px;">
+              <div style="height:100%;width:${w}%;background:var(--accent-light);border-radius:2px;"></div>
+            </div>
+            <div style="font-size:0.78rem;color:var(--ink);font-family:'Cormorant Garamond',serif;min-width:80px;text-align:right;">NT$${fmt(val)} <span style="color:var(--ink-faint);font-size:0.65rem;">${pct}%</span></div>
+          </div>`;
+      }
+      document.getElementById('breakdown-bars').innerHTML = bars;
     }
 
     function addExpense() {
@@ -347,8 +420,25 @@
 
     window.addExpense = addExpense;
     window.delExpense = delExpense;
+    window.renderBreakdown = renderBreakdown;
 
     document.getElementById('rate').addEventListener('input', render);
+
+    document.getElementById('cat-filter').addEventListener('click', e => {
+      const btn = e.target.closest('.cat-filter-btn');
+      if (!btn) return;
+      catFilterPerson = btn.dataset.filter;
+      document.querySelectorAll('#cat-filter .cat-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+      renderBreakdown(expenses, expenses.reduce((s, e) => s + toTwd(e), 0));
+    });
+
+    document.getElementById('day-filter').addEventListener('click', e => {
+      const btn = e.target.closest('.cat-filter-btn');
+      if (!btn) return;
+      catFilterDay = btn.dataset.day;
+      document.querySelectorAll('#day-filter .cat-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+      renderBreakdown(expenses, expenses.reduce((s, e) => s + toTwd(e), 0));
+    });
 
     const amountInput = document.getElementById('inp-amount');
     amountInput.addEventListener('input', () => {
