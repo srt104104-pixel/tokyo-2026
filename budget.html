@@ -30,7 +30,7 @@
     }
     .expense-item { cursor: pointer; }
     .expense-actions {
-      display: none; gap: 0.2rem; align-items: center; margin-left: 0.3rem;
+      display: none; gap: 0.2rem; align-items: center; margin-left: 0.3rem; flex-shrink: 0;
     }
     .expense-item.tapped .expense-actions { display: flex; }
     .expense-action-btn {
@@ -42,6 +42,51 @@
     }
     .expense-action-btn:hover { color: var(--accent); border-color: var(--accent-light); }
     .expense-action-del:hover { color: var(--red); border-color: var(--red); }
+
+    /* ── 編輯 Modal ── */
+    #edit-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.25); z-index: 300;
+      align-items: center; justify-content: center;
+    }
+    #edit-modal-overlay.show { display: flex; }
+    #edit-modal {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 2px; padding: 1.5rem;
+      width: min(420px, 92vw); box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    }
+    .edit-modal-title {
+      font-size: 0.78rem; letter-spacing: 0.15em; color: var(--ink-faint);
+      margin-bottom: 1rem;
+    }
+    .edit-modal-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem;
+      margin-bottom: 1.2rem;
+    }
+    .edit-modal-grid .full { grid-column: 1 / -1; }
+    .edit-modal-label {
+      font-size: 0.68rem; letter-spacing: 0.1em; color: var(--ink-faint);
+      margin-bottom: 0.25rem;
+    }
+    .edit-modal-input, .edit-modal-select {
+      width: 100%; box-sizing: border-box;
+      font-size: 0.78rem; font-family: 'Noto Sans TC', sans-serif;
+      background: var(--cream); border: 1px solid var(--border); border-radius: 1px;
+      padding: 0.3rem 0.5rem; color: var(--ink); letter-spacing: 0.04em;
+    }
+    .edit-modal-btns { display: flex; gap: 0.6rem; justify-content: flex-end; }
+    .edit-modal-ok {
+      background: var(--accent); color: var(--white); border: none;
+      padding: 0.4rem 1.2rem; border-radius: 1px; cursor: pointer;
+      font-size: 0.78rem; letter-spacing: 0.1em; font-family: 'Noto Sans TC', sans-serif;
+    }
+    .edit-modal-ok:hover { background: var(--ink); }
+    .edit-modal-cancel {
+      background: none; color: var(--ink-light); border: 1px solid var(--border);
+      padding: 0.4rem 1.2rem; border-radius: 1px; cursor: pointer;
+      font-size: 0.78rem; letter-spacing: 0.1em; font-family: 'Noto Sans TC', sans-serif;
+    }
+    .edit-modal-cancel:hover { border-color: var(--ink-light); }
   </style>
 </head>
 <body>
@@ -189,6 +234,75 @@
   </main>
 
   <footer class="footer">東京 · 上野 · 2026 · 夏</footer>
+
+  <!-- 編輯 Modal -->
+  <div id="edit-modal-overlay">
+    <div id="edit-modal">
+      <div class="edit-modal-title">編輯支出</div>
+      <div class="edit-modal-grid">
+        <div class="full">
+          <div class="edit-modal-label">項目</div>
+          <input class="edit-modal-input" id="edit-desc" type="text" />
+        </div>
+        <div>
+          <div class="edit-modal-label">幣別</div>
+          <select class="edit-modal-select" id="edit-currency">
+            <option value="JPY">日幣 JPY</option>
+            <option value="TWD">台幣 TWD</option>
+          </select>
+        </div>
+        <div>
+          <div class="edit-modal-label">金額</div>
+          <input class="edit-modal-input" id="edit-amount" type="text" inputmode="numeric" />
+        </div>
+        <div>
+          <div class="edit-modal-label">性質</div>
+          <select class="edit-modal-select" id="edit-shared">
+            <option value="shared">共同</option>
+            <option value="personal">個人</option>
+          </select>
+        </div>
+        <div>
+          <div class="edit-modal-label">付款人</div>
+          <select class="edit-modal-select" id="edit-person">
+            <option value="">—</option>
+            <option value="牛">牛</option>
+            <option value="47">47</option>
+          </select>
+        </div>
+        <div>
+          <div class="edit-modal-label">類別</div>
+          <select class="edit-modal-select" id="edit-cat">
+            <option>餐飲</option>
+            <option>交通</option>
+            <option>景點</option>
+            <option>購物</option>
+            <option>住宿</option>
+            <option>其他</option>
+          </select>
+        </div>
+        <div>
+          <div class="edit-modal-label">日期</div>
+          <select class="edit-modal-select" id="edit-day">
+            <option value=""></option>
+            <option value="">—</option>
+            <option value="8/12">8/12 週三</option>
+            <option value="8/13">8/13 週四</option>
+            <option value="8/14">8/14 週五</option>
+            <option value="8/15">8/15 週六</option>
+            <option value="8/16">8/16 週日</option>
+            <option value="8/17">8/17 週一</option>
+            <option value="8/18">8/18 週二</option>
+            <option value="8/19">8/19 週三</option>
+          </select>
+        </div>
+      </div>
+      <div class="edit-modal-btns">
+        <button class="edit-modal-cancel" id="edit-cancel">取消</button>
+        <button class="edit-modal-ok" id="edit-ok">確認</button>
+      </div>
+    </div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -415,18 +529,50 @@
       if (!isTapped) el.classList.add('tapped');
     }
 
+    let editingIdx = -1;
+
     function editExpense(idx) {
       const e = expenses[idx];
-      const desc = prompt('項目', e.desc);
-      if (desc === null) return;
-      const amount = prompt('金額', e.amount);
-      if (amount === null) return;
-      const parsed = parseInt(String(amount).replace(/,/g, ''), 10);
-      if (!parsed || parsed <= 0) { alert('金額無效'); return; }
-      expenses[idx] = { ...e, desc: desc.trim() || e.desc, amount: parsed };
+      editingIdx = idx;
+      document.getElementById('edit-desc').value = e.desc;
+      document.getElementById('edit-currency').value = e.currency || 'JPY';
+      document.getElementById('edit-amount').value = e.amount;
+      document.getElementById('edit-shared').value = e.shared || 'shared';
+      document.getElementById('edit-person').value = e.person || '';
+      document.getElementById('edit-cat').value = e.cat;
+      document.getElementById('edit-day').value = e.day || '';
+      document.getElementById('edit-modal-overlay').classList.add('show');
+      document.getElementById('edit-desc').focus();
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal-overlay').classList.remove('show');
+      editingIdx = -1;
+    }
+
+    document.getElementById('edit-cancel').addEventListener('click', closeEditModal);
+    document.getElementById('edit-modal-overlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('edit-modal-overlay')) closeEditModal();
+    });
+    document.getElementById('edit-ok').addEventListener('click', () => {
+      if (editingIdx < 0) return;
+      const desc = document.getElementById('edit-desc').value.trim();
+      const amount = parseInt(document.getElementById('edit-amount').value.replace(/,/g, ''), 10);
+      if (!desc || !amount || amount <= 0) { alert('請填寫項目與金額'); return; }
+      expenses[editingIdx] = {
+        ...expenses[editingIdx],
+        desc,
+        currency: document.getElementById('edit-currency').value,
+        amount,
+        shared: document.getElementById('edit-shared').value,
+        person: document.getElementById('edit-person').value,
+        cat: document.getElementById('edit-cat').value,
+        day: document.getElementById('edit-day').value,
+      };
       save();
       render();
-    }
+      closeEditModal();
+    });
 
     function addExpense() {
       const desc = document.getElementById('inp-desc').value.trim();
